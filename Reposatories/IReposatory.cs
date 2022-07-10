@@ -7,14 +7,14 @@
         List<T> GetAll();
 
         // get by id
-        T GetById(int id);  
+        T GetById(Guid id);  
         // insert
         bool Insert(T item);    
         // update
-        bool Update(T item);    
+        bool Update(Guid id,T item);    
 
         // delete
-        bool Delete(T item);    
+        bool Delete(Guid id);    
 
 
 
