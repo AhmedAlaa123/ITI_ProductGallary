@@ -3,18 +3,18 @@
     public interface IReposatory<T>
     {
 
-        //Get All items
+        //Get All Items
         List<T> GetAll();
 
-        // get by id
-        T GetById(int id);  
+        // get Item by id
+        T GetById(Guid id);  
         // insert
         bool Insert(T item);    
-        // update
-        bool Update(T item);    
+        // update Item
+        bool Update(Guid Id,T item);    
 
-        // delete
-        bool Delete(T item);    
+        // delete Item
+        bool Delete(Guid Id,T item);    
 
 
 

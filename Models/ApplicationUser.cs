@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using ProductGallary.Attributes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,7 +8,9 @@ namespace ProductGallary.Models
     [Table("User")]
     public class ApplicationUser:IdentityUser
     {
-        
+        [UniqueUserName] // this is custome username used to validate username is unique
+        public override string UserName { get; set; }
+
         [Required]
         [MaxLength(40),MinLength(10)]
         public string Name { get; set; }

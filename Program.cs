@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProductGallary.Models;
 
@@ -15,6 +16,15 @@ builder.Services.AddDbContext<Context>(optionBuilder =>
     optionBuilder.UseSqlServer(connectionString);
 });
 
+
+// register identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
+{
+    option.Password.RequireDigit = true;
+    option.Password.RequiredLength = 10;
+
+}).AddEntityFrameworkStores<Context>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,7 +35,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
-
+// add authintacation middel ware
+app.UseAuthentication(); // this important for authentication to work
 app.UseAuthorization();
 
 app.MapControllerRoute(

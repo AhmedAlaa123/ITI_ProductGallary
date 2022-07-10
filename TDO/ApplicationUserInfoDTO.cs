@@ -1,7 +1,6 @@
 ﻿namespace ProductGallary.TDO
 {
-    public class GalaryCreateDTO
+    public class ApplicationUserInfoDTO
     {
-        
     }
 }
