@@ -20,7 +20,7 @@ namespace ProductGallary.Models
         public DateTime Created_Date { get; set; }
 
         [ForeignKey("User")]
-        public string User_Id { get; set; }
+        public string? User_Id { get; set; }
         public ApplicationUser User { get; set; }
         public virtual List<Product> Products { get; set; }
 

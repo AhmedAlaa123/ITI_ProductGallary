@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ProductGallary;
 using ProductGallary.Models;
+using ProductGallary.Reposatories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // register
-
+builder.Services.AddScoped<IReposatory<Gallary>, GallaryRepository>();
 // connection String
 string connectionString = builder.Configuration.GetConnectionString("AhmedAlaa");
 builder.Services.AddDbContext<Context>(optionBuilder =>
