@@ -8,6 +8,7 @@ namespace ProductGallary.TDO
         public string name { get; set; }
         [Required]
         public string Logo { get; set; }
-    
+
+
     }
 }

@@ -42,8 +42,6 @@ namespace ProductGallary.Reposatories
                 context.Gallaries.Add(item);
                 context.SaveChanges();
                 return true;
-
-
             }
             catch (Exception)
             {

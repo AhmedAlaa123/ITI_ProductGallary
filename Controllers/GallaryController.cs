@@ -36,7 +36,6 @@ namespace ProductGallary.Controllers
         }
         public IActionResult inseart()
         {
-
             return View();
         }
         [HttpPost]
@@ -50,7 +49,7 @@ namespace ProductGallary.Controllers
             if (ModelState.IsValid)
             {
                 reposatory.Insert(gallary);
-                return Redirect("Index");
+                return Redirect("index");
             }
             return View("inseart");
 
