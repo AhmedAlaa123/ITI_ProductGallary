@@ -50,21 +50,24 @@ namespace ProductGallary.Reposatories
             }
         }
 
-        public bool Update(Guid id, Gallary item)
+        public bool Update(Guid id, Gallary newgall)
         {
-            Gallary oldgallary = GetById(id);
             try
             {
-                oldgallary.Name = item.Name;
-                oldgallary.Logo = item.Logo;
-                oldgallary.Created_Date = item.Created_Date;
-                oldgallary.User_Id = item.User_Id;
-                return true;
+            var oldgallary = GetById(id);
+            oldgallary.Name = newgall.Name;
+            oldgallary.Logo = newgall.Logo;
+            oldgallary.Created_Date=newgall.Created_Date;
+            context.SaveChanges();
+            return true;
+
             }
             catch (Exception)
             {
+
                 return false;
             }
+            
         }
     }
 }

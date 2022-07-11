@@ -54,6 +54,21 @@ namespace ProductGallary.Controllers
             return View("inseart");
 
         }
+        public IActionResult edit(Guid id)
+        {
+            var gallary = reposatory.GetById(id);
+            return View(gallary);
+        }
+        [HttpPost]
+        public IActionResult update(Guid id,Gallary gallary)
+        {
+            if (ModelState.IsValid)
+            {
+                reposatory.Update(id,gallary);
+                return Redirect("index");
+            }
+            return View("edit");
+        }
 
     }
 }

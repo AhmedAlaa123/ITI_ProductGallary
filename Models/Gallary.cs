@@ -22,7 +22,7 @@ namespace ProductGallary.Models
         [ForeignKey("User")]
         public string? User_Id { get; set; }
         public ApplicationUser? User { get; set; }
-        public virtual List<Product> Products { get; set; }
+        public virtual List<Product>? Products { get; set; }
 
     }
 }
