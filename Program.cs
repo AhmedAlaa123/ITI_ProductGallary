@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // register
-builder.Services.AddScoped<IReposatory<Gallary>,GallaryRepesitory>();
+builder.Services.AddScoped<IReposatory<Gallary>,GallaryRepository>();
 // connection String
 string connectionString = builder.Configuration.GetConnectionString("AhmedAlaa");
 builder.Services.AddDbContext<Context>(optionBuilder =>

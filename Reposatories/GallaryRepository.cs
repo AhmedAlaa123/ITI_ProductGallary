@@ -2,10 +2,10 @@
 
 namespace ProductGallary.Reposatories
 {
-    public class GallaryRepesitory : IReposatory<GallaryRepesitory>
+    public class GallaryRepository : IReposatory<Gallary>
     {
         Context context;
-        public GallaryRepesitory(Context context)
+        public GallaryRepository(Context context)
         {
             this.context = context;
         }
@@ -25,22 +25,34 @@ namespace ProductGallary.Reposatories
             }
         }
 
-        public List<GallaryRepesitory> GetAll()
+        public List<Gallary> GetAll()
         {
             return context.Gallaries.ToList();
         }
 
-        public GallaryRepesitory GetById(Guid id)
+        public Gallary GetById(Guid id)
         {
-            return context.Gallaries.FirstOrDefault(e => e.Id == id);
+            return context.Gallaries.FirstOrDefault(x=>x.Id==id);
         }
 
-        public bool Insert(GallaryRepesitory item)
+        public bool Insert(Gallary item)
         {
-            throw new NotImplementedException();
+            try
+            {
+                context.Gallaries.Add(item);
+                context.SaveChanges();
+                return true;
+
+
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
         }
 
-        public bool Update(Guid id, GallaryRepesitory item)
+        public bool Update(Guid id, Gallary item)
         {
             Gallary oldgallary = GetById(id);
             try

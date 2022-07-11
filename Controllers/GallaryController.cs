@@ -6,13 +6,14 @@ namespace ProductGallary.Controllers
 {
     public class GallaryController : Controller
     {
+
         IReposatory<Gallary> reposatory;
         public GallaryController(IReposatory<Gallary> reposatory)
         {
             this.reposatory = reposatory;
         }
 
-        public IActionResult Index()
+            public IActionResult Index()
         {
             var gallary = reposatory.GetAll();
 
