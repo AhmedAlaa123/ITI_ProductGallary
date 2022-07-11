@@ -16,11 +16,11 @@ namespace ProductGallary.Reposatories
             {
                 var item = GetById(id);
                 context.Gallaries.Remove(item);
+                context.SaveChanges();
                 return true;
             }
             catch (Exception)
             {
-
                 return false;
             }
         }

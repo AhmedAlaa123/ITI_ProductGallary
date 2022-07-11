@@ -73,6 +73,25 @@ namespace ProductGallary.Controllers
             }
 
         }
+        public IActionResult delete(Guid id)
+        {
+            Gallary gallary = reposatory.GetById(id);
+            return View(gallary);
+        }
+        public IActionResult confirmdelete(Guid id)
+        {
+            reposatory.Delete(id);
+            return RedirectToAction("index");
+        }
+
+
+
+
+
+
+
+
+
 
     }
 }
