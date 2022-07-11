@@ -6,14 +6,15 @@ namespace ProductGallary.Controllers
 {
     public class GallaryController : Controller
     {
-
+        IWebHostEnvironment env;
         IReposatory<Gallary> reposatory;
-        public GallaryController(IReposatory<Gallary> reposatory)
+        public GallaryController(IReposatory<Gallary> reposatory, IWebHostEnvironment env)
         {
             this.reposatory = reposatory;
+            this.env = env;
         }
 
-            public IActionResult Index()
+        public IActionResult Index()
         {
             var gallary = reposatory.GetAll();
 
@@ -42,12 +43,25 @@ namespace ProductGallary.Controllers
         public IActionResult savegallary(GalaryCreateDTO galaryCreate)
         {
 
-            Gallary gallary = new Gallary();
-            gallary.Name = galaryCreate.name;
-            gallary.Logo = galaryCreate.Logo;
-            gallary.Created_Date = DateTime.Now;
             if (ModelState.IsValid)
             {
+
+                Gallary gallary = new Gallary();
+
+                //upload fole to server
+
+                string uploadimg = Path.Combine(env.WebRootPath, "img");
+                string uniqe = Guid.NewGuid().ToString() + "_" +galaryCreate.Logo.FileName;
+                string pathfile = Path.Combine(uploadimg, uniqe);
+                using (var filestream = new FileStream(pathfile, FileMode.Create))
+                {
+                    galaryCreate.Logo.CopyTo(filestream);
+                    filestream.Close();
+                }
+
+                gallary.Name = galaryCreate.name;
+                gallary.Logo = uniqe;
+                gallary.Created_Date = DateTime.Now;
                 reposatory.Insert(gallary);
                 return Redirect("index");
             }

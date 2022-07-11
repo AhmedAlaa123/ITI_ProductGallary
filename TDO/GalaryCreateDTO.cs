@@ -7,7 +7,7 @@ namespace ProductGallary.TDO
         [Required, MinLength(3), MaxLength(20)]
         public string name { get; set; }
         [Required]
-        public string Logo { get; set; }
+        public IFormFile Logo { get; set; }
 
 
     }
