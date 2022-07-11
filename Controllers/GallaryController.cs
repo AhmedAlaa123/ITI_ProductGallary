@@ -65,9 +65,13 @@ namespace ProductGallary.Controllers
             if (ModelState.IsValid)
             {
                 reposatory.Update(id,gallary);
-                return Redirect("index");
+                return RedirectToAction("index");
             }
+            else
+            {
             return View("edit");
+            }
+
         }
 
     }

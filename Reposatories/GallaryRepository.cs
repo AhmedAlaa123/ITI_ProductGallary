@@ -54,10 +54,10 @@ namespace ProductGallary.Reposatories
         {
             try
             {
-            var oldgallary = GetById(id);
+           Gallary oldgallary = GetById(id);
             oldgallary.Name = newgall.Name;
             oldgallary.Logo = newgall.Logo;
-            oldgallary.Created_Date=newgall.Created_Date;
+            oldgallary.Created_Date=DateTime.Now;
             context.SaveChanges();
             return true;
 

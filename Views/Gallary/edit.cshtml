@@ -6,7 +6,7 @@
 
 <h1>edit</h1>
 
-<form method="post" action="/Gallary/update">
+<form method="post" asp-controller="Gallary" asp-action="update"  asp-route-id="@Model.Id">
   <div class="mb-3 mt-3">
      <label>اسم المعرض:</label>
     <input  asp-for="Name" class="form-control" placeholder="ادخل اسم المعرض">
