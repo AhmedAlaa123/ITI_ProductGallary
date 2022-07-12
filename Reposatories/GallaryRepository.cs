@@ -1,4 +1,5 @@
-﻿using ProductGallary.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductGallary.Models;
 using ProductGallary.Reposatories;
 namespace ProductGallary.Reposatories
 {
@@ -23,6 +24,11 @@ namespace ProductGallary.Reposatories
             {
                 return false;
             }
+        }
+
+        public List<Gallary> filter(string id)
+        {
+            return context.Gallaries.Where(x => x.User_Id == id).ToList();
         }
 
         public List<Gallary> GetAll()

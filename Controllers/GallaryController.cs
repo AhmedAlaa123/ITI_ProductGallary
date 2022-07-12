@@ -1,24 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductGallary.Models;
 using ProductGallary.TDO;
+using ProductGallary.Constants;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProductGallary.Controllers
 {
     public class GallaryController : Controller
     {
         IWebHostEnvironment env;
+        private readonly UserManager<ApplicationUser> userManger;
         IReposatory<Gallary> reposatory;
-        public GallaryController(IReposatory<Gallary> reposatory, IWebHostEnvironment env)
+        public GallaryController(IReposatory<Gallary> reposatory, IWebHostEnvironment env, UserManager<ApplicationUser> userManger)
         {
             this.reposatory = reposatory;
             this.env = env;
+            this.userManger = userManger;
         }
 
+          List<GalaryInfoDTO> galaryInfos = new List<GalaryInfoDTO>();
         public IActionResult Index()
         {
             var gallary = reposatory.GetAll();
 
-            List<GalaryInfoDTO> galaryInfos = new List<GalaryInfoDTO>();
             foreach (var item in gallary)
             {
                 GalaryInfoDTO dto = new GalaryInfoDTO();
@@ -35,11 +40,16 @@ namespace ProductGallary.Controllers
             Gallary gal = reposatory.GetById(id);
             return View(gal);
         }
+        [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
         public IActionResult inseart()
         {
             return View();
         }
+        
+
+
         [HttpPost]
+        [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
         public IActionResult savegallary(GalaryCreateDTO galaryCreate)
         {
 
@@ -51,7 +61,7 @@ namespace ProductGallary.Controllers
                 //upload fole to server
 
                 string uploadimg = Path.Combine(env.WebRootPath, "img/GallaryLogo");
-                string uniqe = Guid.NewGuid().ToString() + "_" +galaryCreate.Logo.FileName;
+                string uniqe = Guid.NewGuid().ToString() + "_" + galaryCreate.Logo.FileName;
                 string pathfile = Path.Combine(uploadimg, uniqe);
                 using (var filestream = new FileStream(pathfile, FileMode.Create))
                 {
@@ -62,43 +72,67 @@ namespace ProductGallary.Controllers
                 gallary.Name = galaryCreate.name;
                 gallary.Logo = uniqe;
                 gallary.Created_Date = DateTime.Now;
+               var userID = userManger.GetUserId(HttpContext.User);
+                gallary.User_Id = userID;
                 reposatory.Insert(gallary);
                 return Redirect("index");
             }
             return View("inseart");
 
         }
+        [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
         public IActionResult edit(Guid id)
         {
             var gallary = reposatory.GetById(id);
             return View(gallary);
         }
         [HttpPost]
-        public IActionResult update(Guid id,Gallary gallary)
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
+        public IActionResult update(Guid id, Gallary gallary)
         {
             if (ModelState.IsValid)
             {
-                reposatory.Update(id,gallary);
+                reposatory.Update(id, gallary);
                 return RedirectToAction("index");
             }
             else
             {
-            return View("edit");
+                return View("edit");
             }
 
         }
+        [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
         public IActionResult delete(Guid id)
         {
             Gallary gallary = reposatory.GetById(id);
             return View(gallary);
         }
+        [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
         public IActionResult confirmdelete(Guid id)
         {
             reposatory.Delete(id);
             return RedirectToAction("index");
         }
+        [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
+        public IActionResult Dashboard(string id)
+        {
+            var gallary = reposatory.filter(id);
 
 
+            foreach (var item in gallary)
+            {
+                GalaryInfoDTO dto = new GalaryInfoDTO();
+                dto.Id = item.Id;
+                dto.Name = item.Name;
+                dto.Logo = item.Logo;
+                dto.Created_Date = item.Created_Date;
+                galaryInfos.Add(dto);
+            }
+            return View(galaryInfos);
+
+
+        }
 
 
 

@@ -1,6 +1,4 @@
 ﻿
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +23,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-info" asp-area="" asp-controller="Home" asp-action="Index">الرئيسيه</a>
                         </li>
-                       
+                         <li class="nav-item">
+                            <a class="nav-link text-info" asp-area="" asp-controller="Gallary" asp-action="Index">المعارض</a>
+                        </li>
+                                           
+                        @if (User.Identity.IsAuthenticated && User.IsInRole(role: Roles.BUYER_ROLE))
+                        {
+                            <li class="nav-item">
+
+                                <a class="nav-link text-info" asp-area="" asp-controller="Gallary" asp-action="Dashboard" asp-route-id="">لوحة التحكم</a>
+                                
+                            </li>
+                        }
                     </ul>
 
                      <ul class="navbar-nav ms-auto ">

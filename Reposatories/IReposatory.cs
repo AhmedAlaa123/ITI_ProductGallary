@@ -14,9 +14,9 @@
         bool Update(Guid id,T item);    
 
         // delete
-        bool Delete(Guid id);    
+        bool Delete(Guid id);
 
-
+        List<T> filter(string id);
 
     }
 }
