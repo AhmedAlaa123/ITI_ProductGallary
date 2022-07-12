@@ -97,7 +97,9 @@ namespace ProductGallary.Controllers
                     await userManger.AddToRoleAsync(user, role);
 
                     //redirect to login page
+                    if(this.User==null)
                     return RedirectToAction("Login");
+                    return RedirectToAction("Index","Home");
                 }
                 else
                 {
@@ -134,11 +136,12 @@ namespace ProductGallary.Controllers
             // get user with usernam
             ApplicationUser user = await this.userManger.FindByNameAsync(loginUser.UserName);
             
+            
             // check if User is found
             if(user==null)
             {
                 // check if user is the admin
-                if(loginUser.UserName.Trim().ToLower().Equals("admin")&& loginUser.Password.Trim().ToLower().Equals("adminadmin"))
+                if(loginUser.UserName.Trim().ToLower().Equals("admin")&& loginUser.Password.Trim().ToLower().Equals("adminadmin")&& !await this.roleManager.RoleExistsAsync(Roles.ADMIN_ROLE))
                 {
                     // create account for admin show register view
                     
