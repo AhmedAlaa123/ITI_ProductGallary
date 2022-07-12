@@ -50,7 +50,7 @@ namespace ProductGallary.Controllers
 
                 //upload fole to server
 
-                string uploadimg = Path.Combine(env.WebRootPath, "img");
+                string uploadimg = Path.Combine(env.WebRootPath, "img/GallaryLogo");
                 string uniqe = Guid.NewGuid().ToString() + "_" +galaryCreate.Logo.FileName;
                 string pathfile = Path.Combine(uploadimg, uniqe);
                 using (var filestream = new FileStream(pathfile, FileMode.Create))

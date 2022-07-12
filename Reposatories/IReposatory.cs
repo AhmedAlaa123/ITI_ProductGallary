@@ -3,7 +3,7 @@
     public interface IReposatory<T>
     {
 
-        //Get All items
+        //Get All Items
         List<T> GetAll();
 
         // get by id
