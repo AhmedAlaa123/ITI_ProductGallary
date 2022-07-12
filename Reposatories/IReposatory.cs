@@ -14,7 +14,7 @@
         bool Update(Guid Id,T item);    
 
         // delete Item
-        bool Delete(Guid Id,T item);    
+        bool Delete(Guid Id);    
 
 
 
