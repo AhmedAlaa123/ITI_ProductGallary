@@ -28,7 +28,7 @@ namespace ProductGallary.Models
         {
             var builder = WebApplication.CreateBuilder();
 
-            string connectionString = builder.Configuration.GetConnectionString("AhmedAlaa");
+            string connectionString = builder.Configuration.GetConnectionString("Mona");
             optionsBuilder.UseSqlServer(connectionString);
             
         }
