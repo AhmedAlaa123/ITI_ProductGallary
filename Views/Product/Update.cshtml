@@ -2,8 +2,9 @@
 @{
     ViewData["Title"] = "Update";
    
-  
-   //SelectList deptitems = new SelectList(ViewBag.DeptList,"Id","Name");
+   ViewData["Title"] = "New";
+        SelectList CategoryItems = 
+            new SelectList(ViewBag.CategoryList,"Id","Name");
 
 }
 
@@ -52,9 +53,11 @@
 
 
   <div class="mb-3 mt-3">
-         @* <select asp-items="Gallaryitems" asp-for="Gallary_Id" class="form-control">
-               <option value="0" >-- Select Gallary --</option>
-        </select>*@
+    <div>
+        <label asp-for="Category_Id">اسم الفئة  </label>
+        <select asp-items="CategoryItems" asp-for="Category_Id"  class="form-control">                    
+        </select>   
+    </div>
   </div>
   <button type="submit" class="btn btn-primary">تعديل </button>
   </form>

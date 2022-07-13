@@ -16,7 +16,7 @@ builder.Services.AddScoped<IReposatory<Category>, CategoryRepository>();
 
 // connection String
 string connectionString = builder.Configuration.GetConnectionString("Mona");
-string connectionString = builder.Configuration.GetConnectionString("Sara");
+//string connectionString = builder.Configuration.GetConnectionString("Sara");
 builder.Services.AddDbContext<Context>(optionBuilder =>
 {
     optionBuilder.UseSqlServer(connectionString);

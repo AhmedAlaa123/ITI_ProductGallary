@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProductGallary.TDO
 {
@@ -19,5 +20,9 @@ namespace ProductGallary.TDO
         public float? DiscountPercentage { get; set; }
         [Required]
         public string? Description { get; set; }
+
+        [ForeignKey("Category")]
+        public Guid? Category_Id { get; set; }
+
     }
 }

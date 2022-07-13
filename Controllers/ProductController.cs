@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProductGallary.Constants;
 using ProductGallary.Models;
@@ -12,18 +13,18 @@ namespace ProductGallary.Controllers
 
         //DIP
         IReposatory<Product> ProductRepo;
+        IReposatory<Category> CategRepo;
+        private readonly UserManager<ApplicationUser> userManger;
         IWebHostEnvironment webHostEnvironment;
-
         //DI dependance injection (constructor)
-        public ProductController(IReposatory<Product> _productRepo, IWebHostEnvironment webHostEnvironment)
+        public ProductController(IReposatory<Product> _productRepo, IWebHostEnvironment webHostEnvironment , IReposatory<Category> _CategRepo , UserManager<ApplicationUser> userManger)
         {
             ProductRepo = _productRepo;
+            CategRepo = _CategRepo;
             this.webHostEnvironment = webHostEnvironment;
         }
         //image upload
-
-        // get all products
-    //    [Authorize(Roles = $"{Roles.CUSTOMER_ROLE },{Roles.BUYER_ROLE},{Roles.ADMIN_ROLE}")]
+        //get all products
 
         public IActionResult Index()
         {
@@ -31,7 +32,6 @@ namespace ProductGallary.Controllers
 
             return View(xProduct);
         }
-      //  [Authorize(Roles = $"{Roles.CUSTOMER_ROLE},{Roles.BUYER_ROLE},{Roles.ADMIN_ROLE}")]
 
         public IActionResult Details(Guid id)
         {
@@ -43,7 +43,8 @@ namespace ProductGallary.Controllers
 
         [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
         public IActionResult New()
-        {        
+        {
+            ViewData["CategoryList"] = CategRepo.GetAll();
             return View(new ProductCreateTDO());
         }
         [HttpPost]
@@ -52,7 +53,7 @@ namespace ProductGallary.Controllers
         public IActionResult Savenew(ProductCreateTDO createTDO)
 
         {
-           // ViewData["GalleryList"] = ProductRepo.GetAll();
+           ViewData["CategoryList"] = CategRepo.GetAll();
 
 
             if (ModelState.IsValid == true)
@@ -86,7 +87,7 @@ namespace ProductGallary.Controllers
 
         public IActionResult Update(Guid id)
         {
-            //ViewData["GallaryList"] = ProductRepo.GetAll();
+            ViewData["CategoryList"] = CategRepo.GetAll();
             var oldproduct = ProductRepo.GetById(id);
             return View(oldproduct);
         }
@@ -94,7 +95,7 @@ namespace ProductGallary.Controllers
 
         public IActionResult Saveupdate(Guid id, Product newproduct)
         {
-            ViewData["ProductList"] = ProductRepo.GetAll();
+            ViewData["CategoryList"] = CategRepo.GetAll();
 
             if (ModelState.IsValid)
             {
@@ -124,6 +125,7 @@ namespace ProductGallary.Controllers
             ProductRepo.Delete(id);
             return RedirectToAction("Index");
         }
+        
 
     }
 }
