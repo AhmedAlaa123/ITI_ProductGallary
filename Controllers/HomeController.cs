@@ -20,11 +20,12 @@ namespace ProductGallary.Controllers
 
         public IActionResult Index()
         {
-   
-                GalaryInfoDTO dto = new GalaryInfoDTO();
-                var userID = userManger.GetUserId(HttpContext.User);
-                dto.user_id = userID;
-            return View(dto);
+
+            //    GalaryInfoDTO dto = new GalaryInfoDTO();
+            //    var userID = userManger.GetUserId(HttpContext.User);
+            //    dto.user_id = userID;
+            //return View(dto);
+            return View();
         }
 
         public IActionResult Privacy()

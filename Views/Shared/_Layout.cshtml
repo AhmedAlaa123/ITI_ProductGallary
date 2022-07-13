@@ -1,6 +1,4 @@
-﻿@using ProductGallary.TDO
-@model List<GalaryInfoDTO>
-
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,14 +27,14 @@
                             <a class="nav-link text-info" asp-area="" asp-controller="Gallary" asp-action="index">المعارض</a>
 
                         </li>
-
+@*
                         <li>
                                @if (User.Identity.IsAuthenticated && User.IsInRole(role: Roles.BUYER_ROLE))
                                {
                                    <a class="nav-link text-info" asp-area="" asp-controller="Gallary" asp-action="Dashboard" asp-route-id="">لوحة النحكم</a>
 
                                }
-                        </li>
+                        </li>*@
                     </ul>
 
                      <ul class="navbar-nav ms-auto ">
