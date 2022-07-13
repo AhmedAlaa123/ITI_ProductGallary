@@ -6,7 +6,7 @@
         //Get All Items
         List<T> GetAll();
 
-        // get Item by id
+        // get by id
         T GetById(Guid id);  
         // insert
         bool Insert(T item);    
@@ -20,6 +20,8 @@
         bool Delete(Guid Id);    
 
 
+        // delete
+        bool Delete(Guid id);
 
 
     }

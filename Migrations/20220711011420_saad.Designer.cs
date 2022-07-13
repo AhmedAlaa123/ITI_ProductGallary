@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductGallary.Models;
 
@@ -11,9 +12,10 @@ using ProductGallary.Models;
 namespace ProductGallary.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220711011420_saad")]
+    partial class saad
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -364,20 +366,20 @@ namespace ProductGallary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("Category_Id")
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("DiscountPercentage")
+                    b.Property<float>("DiscountPercentage")
                         .HasColumnType("real");
 
-                    b.Property<Guid?>("Gallary_Id")
+                    b.Property<Guid>("Gallary_Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("HasDiscount")
+                    b.Property<bool>("HasDiscount")
                         .HasColumnType("bit");
 
                     b.Property<string>("Image")
@@ -388,19 +390,19 @@ namespace ProductGallary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OrderProductListId")
+                    b.Property<Guid>("OrderProductListId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float?>("Price")
-                        .IsRequired()
+                    b.Property<float>("Price")
                         .HasColumnType("real");
 
                     b.Property<string>("User_Id")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Category_Id");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("Gallary_Id");
 
@@ -525,23 +527,27 @@ namespace ProductGallary.Migrations
 
             modelBuilder.Entity("ProductGallary.Models.Product", b =>
                 {
-                    b.HasOne("ProductGallary.Models.Category", "Category")
+                    b.HasOne("ProductGallary.Models.Category", null)
                         .WithMany("Products")
-                        .HasForeignKey("Category_Id");
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("ProductGallary.Models.Gallary", "Gallary")
                         .WithMany("Products")
-                        .HasForeignKey("Gallary_Id");
+                        .HasForeignKey("Gallary_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProductGallary.Models.OrderProductList", "OrderProductList")
                         .WithMany("Products")
-                        .HasForeignKey("OrderProductListId");
+                        .HasForeignKey("OrderProductListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithMany("Products")
-                        .HasForeignKey("User_Id");
-
-                    b.Navigation("Category");
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Gallary");
 
