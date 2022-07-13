@@ -11,7 +11,7 @@
         // insert
         bool Insert(T item);    
         // update
-        bool Update(T item);    
+        bool Update(Guid id,T item);    
 
         // delete
         bool Delete(T item);    
