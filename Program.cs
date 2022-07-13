@@ -11,6 +11,7 @@ builder.Services.AddControllersWithViews();
 
 // register
 builder.Services.AddScoped<IReposatory<Gallary>,GallaryRepository>();
+builder.Services.AddScoped<IFilter<Gallary>, GallaryRepository>();
 // connection String
 string connectionString = builder.Configuration.GetConnectionString("AhmedAlaa");
 builder.Services.AddDbContext<Context>(optionBuilder =>

@@ -16,7 +16,6 @@
         // delete
         bool Delete(Guid id);
 
-        List<T> filter(string id);
 
     }
 }

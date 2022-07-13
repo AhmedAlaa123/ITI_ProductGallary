@@ -4,6 +4,7 @@ using ProductGallary.TDO;
 using ProductGallary.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using ProductGallary.Reposatories;
 
 namespace ProductGallary.Controllers
 {
@@ -12,14 +13,16 @@ namespace ProductGallary.Controllers
         IWebHostEnvironment env;
         private readonly UserManager<ApplicationUser> userManger;
         IReposatory<Gallary> reposatory;
-        public GallaryController(IReposatory<Gallary> reposatory, IWebHostEnvironment env, UserManager<ApplicationUser> userManger)
+        IFilter<Gallary> filter;
+        public GallaryController(IReposatory<Gallary> reposatory, IWebHostEnvironment env, UserManager<ApplicationUser> userManger, IFilter<Gallary> filter)
         {
             this.reposatory = reposatory;
             this.env = env;
             this.userManger = userManger;
+            this.filter = filter;
         }
 
-          List<GalaryInfoDTO> galaryInfos = new List<GalaryInfoDTO>();
+        List<GalaryInfoDTO> galaryInfos = new List<GalaryInfoDTO>();
         public IActionResult Index()
         {
             var gallary = reposatory.GetAll();
@@ -133,7 +136,7 @@ namespace ProductGallary.Controllers
 
         public IActionResult mygallary(string id)
         {
-            var gallary = reposatory.filter(id);
+            var gallary = filter.filter(id);
 
 
             foreach (var item in gallary)

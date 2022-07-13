@@ -3,7 +3,7 @@ using ProductGallary.Models;
 using ProductGallary.Reposatories;
 namespace ProductGallary.Reposatories
 {
-    public class GallaryRepository : IReposatory<Gallary>
+    public class GallaryRepository : IReposatory<Gallary> ,IFilter<Gallary>
     {
         Context context;
         public GallaryRepository(Context context)
