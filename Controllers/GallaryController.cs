@@ -23,7 +23,7 @@ namespace ProductGallary.Controllers
         public IActionResult Index()
         {
             var gallary = reposatory.GetAll();
-
+            List<GalaryInfoDTO> galaryInfos = new List<GalaryInfoDTO>();
             foreach (var item in gallary)
             {
                 GalaryInfoDTO dto = new GalaryInfoDTO();
@@ -31,6 +31,8 @@ namespace ProductGallary.Controllers
                 dto.Name = item.Name;
                 dto.Logo = item.Logo;
                 dto.Created_Date = item.Created_Date;
+                var userID = userManger.GetUserId(HttpContext.User);
+                dto.user_id = userID;
                 galaryInfos.Add(dto);
             }
             return View(galaryInfos);
