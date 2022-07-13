@@ -117,7 +117,21 @@ namespace ProductGallary.Controllers
             return RedirectToAction("index");
         }
         [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
-        public IActionResult Dashboard(string id)
+
+        public IActionResult Dashboard()
+        {
+            GalaryInfoDTO dto = new GalaryInfoDTO();
+            var userID = userManger.GetUserId(HttpContext.User);
+            dto.user_id = userID;
+            return View(dto);
+
+
+        }
+
+
+
+
+        public IActionResult mygallary(string id)
         {
             var gallary = reposatory.filter(id);
 
@@ -135,11 +149,6 @@ namespace ProductGallary.Controllers
 
 
         }
-
-
-
-
-
 
 
 
