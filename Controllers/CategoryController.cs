@@ -26,6 +26,7 @@ namespace ProductGallary.Controllers
 
             return View(Cat);
         }
+        [Authorize(Roles = $"{Roles.ADMIN_ROLE}")]
         public IActionResult New()
         {
             return View(new Category());
@@ -50,14 +51,14 @@ namespace ProductGallary.Controllers
                 return View("New", newCateg);
             }
         }
-
+        [Authorize(Roles = $"{Roles.ADMIN_ROLE}")]
         public IActionResult Update(Guid id)
         {
             //ViewData["GallaryList"] = ProductRepo.GetAll();
             var oldcateg = CategRepo.GetById(id);
             return View(oldcateg);
         }
-
+        [Authorize(Roles = $"{Roles.ADMIN_ROLE}")]
         public IActionResult Saveupdate(Guid id, Category newcat)
         {
             ViewData["CategList"] = CategRepo.GetAll();
@@ -68,7 +69,7 @@ namespace ProductGallary.Controllers
             }
             return View("Edit", newcat);
         }
-
+        [Authorize(Roles = $"{Roles.ADMIN_ROLE}")]
         public IActionResult Delete(Guid id)
         {
             CategRepo.Delete(id);

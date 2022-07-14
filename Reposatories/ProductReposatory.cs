@@ -1,0 +1,81 @@
+﻿using ProductGallary.Models;
+
+
+namespace ProductGallary.Reposatories
+{
+    public class ProductReposatory: IReposatory<Product>
+    {
+      
+        Context context;
+        public ProductReposatory(Context context)
+        {
+            this.context = context;
+        }
+
+        public List<Product> GetAll()
+        {
+             return context.Products.ToList();
+           
+        }
+        
+        public Product GetById(Guid id)
+        {
+            return context.Products.FirstOrDefault(x=>x.Id ==id);
+        }
+        public bool Insert( Product item)
+        {
+            try
+            {
+                context.Products.Add(item);
+                context.SaveChanges();
+                return true;
+            }
+            catch (Exception e )
+            {
+                return false;
+            }
+           
+
+        }
+        public bool Update(Guid id, Product item)
+        {
+           
+                try
+                 { 
+            
+                
+                    Product OldProduct = GetById(id);
+                    OldProduct.Name = item.Name;
+                    OldProduct.Image = item.Image;
+                    OldProduct.Price = item.Price;
+                    OldProduct.HasDiscount = item.HasDiscount;
+                    OldProduct.DiscountPercentage = item.DiscountPercentage;
+                    OldProduct.Description = item.Description;
+                    OldProduct.User_Id = item.User_Id;
+
+                    context.SaveChanges();
+                    return true;
+                
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+                                 
+        }
+        public bool Delete(Guid id)
+        {
+            try
+            {
+                Product OldProduct = GetById(id);
+                context.Products.Remove(OldProduct);
+                context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+    }
+}

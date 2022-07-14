@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductGallary.Models;
 
@@ -11,9 +12,10 @@ using ProductGallary.Models;
 namespace ProductGallary.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220709174500_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,7 +216,6 @@ namespace ProductGallary.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -288,6 +289,7 @@ namespace ProductGallary.Migrations
                         .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("User_Id")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -316,6 +318,7 @@ namespace ProductGallary.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("User_Id")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -333,9 +336,6 @@ namespace ProductGallary.Migrations
 
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsCanceled")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -374,13 +374,13 @@ namespace ProductGallary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("DiscountPercentage")
+                    b.Property<float>("DiscountPercentage")
                         .HasColumnType("real");
 
                     b.Property<Guid?>("Gallary_Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("HasDiscount")
+                    b.Property<bool>("HasDiscount")
                         .HasColumnType("bit");
 
                     b.Property<string>("Image")
@@ -391,11 +391,10 @@ namespace ProductGallary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OrderProductListId")
+                    b.Property<Guid>("OrderProductListId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float?>("Price")
-                        .IsRequired()
+                    b.Property<float>("Price")
                         .HasColumnType("real");
 
                     b.Property<string>("User_Id")
@@ -499,7 +498,9 @@ namespace ProductGallary.Migrations
                 {
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithMany("Categories")
-                        .HasForeignKey("User_Id");
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -508,7 +509,9 @@ namespace ProductGallary.Migrations
                 {
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithMany("Gallaries")
-                        .HasForeignKey("User_Id");
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -536,7 +539,9 @@ namespace ProductGallary.Migrations
 
                     b.HasOne("ProductGallary.Models.OrderProductList", "OrderProductList")
                         .WithMany("Products")
-                        .HasForeignKey("OrderProductListId");
+                        .HasForeignKey("OrderProductListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithMany("Products")

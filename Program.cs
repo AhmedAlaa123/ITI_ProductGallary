@@ -10,13 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // register
+builder.Services.AddScoped<IReposatory<Product>, ProductReposatory>();
 
 builder.Services.AddScoped<IReposatory<Category>, CategoryRepository>();
 
 builder.Services.AddScoped<IReposatory<Gallary>,GallaryRepository>();
 builder.Services.AddScoped<IFilter<Gallary>, GallaryRepository>();
 // connection String
-string connectionString = builder.Configuration.GetConnectionString("Sara");
+string connectionString = builder.Configuration.GetConnectionString("Mona");
+//string connectionString = builder.Configuration.GetConnectionString("Sara");
 builder.Services.AddDbContext<Context>(optionBuilder =>
 {
     optionBuilder.UseSqlServer(connectionString);

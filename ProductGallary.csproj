@@ -18,6 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ViewModels\" />
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
