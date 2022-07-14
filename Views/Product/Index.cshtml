@@ -1,0 +1,39 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3> المنتجات </h3> <br />
+
+@if (User.IsInRole("BUYER")){
+
+    <a class="btn btn-success" asp-controller="Product" asp-action="New">إضافة منتج جديد  </a><br> 
+    <br />
+}
+
+<div class="container">
+<div class="row">
+ 
+   @foreach (var item in @Model)
+   {     
+        <div class="card col-4">
+          <img class="card-img-top" height="300" width="360" src="/Img/ProductImages/@item.Image" alt="Card image">
+          <div class="card-body">
+          <h4 class="card-title">أسم المنتج :  @item.Name</h4>
+          <p class="card-text"> سعر المنتج  :@item.Price جنيه </p>
+          <p class="card-text"> وصف المنتج :@item.Description</p>
+          </div>
+           <a class="btn btn-success" asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">التفاصيل </a><br>
+            @if (User.IsInRole("BUYER")){             
+               <a class="btn btn-success" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id">تعديل المنتج  </a><br>
+               <a class="btn btn-success" asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id"> حذف المنتج </a>
+            }
+            
+        </div>
+   }
+  </div>
+  </div>
+<br />
+<br />
+<br />
+<br />

@@ -27,7 +27,12 @@
                             <a class="nav-link text-info" asp-area="" asp-controller="Gallary" asp-action="index">المعارض</a>
 
                         </li>
-
+                                                <li class="nav-item">
+                            <a class="nav-link text-info" asp-area="" asp-controller="Product" asp-action="Index">المنتجات</a>
+                        </li>
+                                                <li class="nav-item">
+                            <a class="nav-link text-info" asp-area="" asp-controller="Category" asp-action="Index">الفئات </a>
+                        </li>
                         <li>
                                @if (User.Identity.IsAuthenticated && User.IsInRole(role: Roles.BUYER_ROLE))
                                {
@@ -35,6 +40,7 @@
 
                                }
                         </li>
+
                     </ul>
 
                      <ul class="navbar-nav ms-auto ">

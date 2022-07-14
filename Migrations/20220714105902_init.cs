@@ -28,9 +28,9 @@ namespace ProductGallary.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -173,7 +173,7 @@ namespace ProductGallary.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -182,8 +182,7 @@ namespace ProductGallary.Migrations
                         name: "FK_Category_AspNetUsers_User_Id",
                         column: x => x.User_Id,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -194,7 +193,7 @@ namespace ProductGallary.Migrations
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Logo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -203,8 +202,7 @@ namespace ProductGallary.Migrations
                         name: "FK_Gallary_AspNetUsers_User_Id",
                         column: x => x.User_Id,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -235,13 +233,13 @@ namespace ProductGallary.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
-                    HasDiscount = table.Column<bool>(type: "bit", nullable: false),
-                    DiscountPercentage = table.Column<float>(type: "real", nullable: false),
+                    HasDiscount = table.Column<bool>(type: "bit", nullable: true),
+                    DiscountPercentage = table.Column<float>(type: "real", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Gallary_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderProductListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Gallary_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Category_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    OrderProductListId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -250,25 +248,22 @@ namespace ProductGallary.Migrations
                         name: "FK_Product_AspNetUsers_User_Id",
                         column: x => x.User_Id,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Product_Category_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_Product_Category_Category_Id",
+                        column: x => x.Category_Id,
                         principalTable: "Category",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Product_Gallary_Gallary_Id",
                         column: x => x.Gallary_Id,
                         principalTable: "Gallary",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Product_OrderProductList_OrderProductListId",
                         column: x => x.OrderProductListId,
                         principalTable: "OrderProductList",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -388,9 +383,9 @@ namespace ProductGallary.Migrations
                 column: "OrderProductListId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_CategoryId",
+                name: "IX_Product_Category_Id",
                 table: "Product",
-                column: "CategoryId");
+                column: "Category_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_Gallary_Id",
