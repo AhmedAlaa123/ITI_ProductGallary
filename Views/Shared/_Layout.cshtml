@@ -25,7 +25,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-info" asp-area="" asp-controller="Home" asp-action="Index">الرئيسيه</a>
                         </li>
-                       
+                        @if(User.Identity.IsAuthenticated&&User.IsInRole(role: Roles.ADMIN_ROLE))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-info" asp-area="" asp-controller="Category" asp-action="Index">الفئات</a>
+                            </li>
+                        }
                     </ul>
 
                      <ul class="navbar-nav ms-auto ">
