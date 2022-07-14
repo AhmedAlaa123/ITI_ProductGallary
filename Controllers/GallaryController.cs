@@ -48,7 +48,7 @@ namespace ProductGallary.Controllers
         [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
         public IActionResult inseart()
         {
-            return View();
+            return View( );
         }
         
 
@@ -73,11 +73,11 @@ namespace ProductGallary.Controllers
                     galaryCreate.Logo.CopyTo(filestream);
                     filestream.Close();
                 }
-
+                
                 gallary.Name = galaryCreate.name;
                 gallary.Logo = uniqe;
                 gallary.Created_Date = DateTime.Now;
-               var userID = userManger.GetUserId(HttpContext.User);
+                var userID = userManger.GetUserId(HttpContext.User);
                 gallary.User_Id = userID;
                 reposatory.Insert(gallary);
                 return Redirect("index");
