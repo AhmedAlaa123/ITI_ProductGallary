@@ -11,14 +11,14 @@ namespace ProductGallary.Models
 
         [Required]
         [ForeignKey("User")]
-        public string User_Id { get; set; }
+        public string? User_Id { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public ApplicationUser? User { get; set; }
 
         [ForeignKey("Order")]
-        public Guid Order_Id { get; set; }
+        public Guid? Order_Id { get; set; }
 
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
 
 
     }

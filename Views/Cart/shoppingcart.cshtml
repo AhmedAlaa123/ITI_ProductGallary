@@ -1,0 +1,30 @@
+﻿@using ProductGallary.TDO;
+@model List<Carttdo>
+@{
+    ViewData["Title"] = "shoppingcart";
+}
+
+<h1>shoppingcart</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">اسم المنتج</th>
+      <th scope="col">السعر</th>
+      <th scope="col">قيمة الخصم</th>
+    </tr>
+      <tbody>
+@foreach (var item in @Model)
+{
+       <tr>
+      <th scope="row"></th>
+      <td>@item.Order_Id</td>
+      <td>@item.Id</td>
+      <td><a class="btn btn-succes">طلب</a></td>
+    </tr>
+}
+  </tbody>
+  </thead>
+</table>
+
+

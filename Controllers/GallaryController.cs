@@ -46,6 +46,12 @@ namespace ProductGallary.Controllers
             return View(gal);
         }
         [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
+        public IActionResult DetailsforBuyer(Guid id)
+        {
+            Gallary gal = reposatory.GetById(id);
+            return View(gal);
+        }
+        [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
         public IActionResult inseart()
         {
             return View( );

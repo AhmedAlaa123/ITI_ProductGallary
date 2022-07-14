@@ -14,6 +14,7 @@ builder.Services.AddScoped<IReposatory<Gallary>,GallaryRepository>();
 builder.Services.AddScoped<IFilter<Gallary>, GallaryRepository>();
 builder.Services.AddScoped<IReposatory<Product>, ProductReposatory>();
 builder.Services.AddScoped<IReposatory<Category>, CategoryRepository>();
+builder.Services.AddScoped<CartInterface,CartRepository>();
 // connection String
 string connectionString = builder.Configuration.GetConnectionString("AhmedAlaa");
 builder.Services.AddDbContext<Context>(optionBuilder =>

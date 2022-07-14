@@ -18,12 +18,12 @@
                 <p class="card-text"> السعر بعد الخصم : @(( Model.DiscountPercentage /100)*(Model.Price)) جنيه </p>
             }
   
-    <form>
-    <button asp-action="Index">العودة إلي كل المنتجات </button>
-                @if (User.IsInRole("BUYER"))
-                {
-                    <button asp-action="Update"asp-route-id="@Model.Id">تعديل المنتج  </button>
-                }
+    <button asp-action="Index">العودة إلي كل المنتجات </button>        
+    <form asp-controller="Cart" asp-action="addtocart" method="post">
+      <input asp-for="Name" hidden /> 
+      <input asp-for="Price" hidden /> 
+      <input asp-for="HasDiscount" hidden /> 
+   <button class=" btn-success"  type="submit">اضافة للسلة</button>
     </form>
   </div>
 </div>
