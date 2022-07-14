@@ -16,8 +16,7 @@
         // delete Item
         bool Delete(Guid Id);    
 
-        // delete
-        bool Delete(Guid id);
+     
 
 
     }
