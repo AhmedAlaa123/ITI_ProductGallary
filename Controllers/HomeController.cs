@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductGallary.Models;
 using System.Diagnostics;
+using ProductGallary.TDO;
+using Microsoft.AspNetCore.Identity;
 
 namespace ProductGallary.Controllers
 {
@@ -8,6 +10,7 @@ namespace ProductGallary.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+        
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -15,6 +18,7 @@ namespace ProductGallary.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 

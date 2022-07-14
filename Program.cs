@@ -13,6 +13,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IReposatory<Category>, CategoryRepository>();
 
+builder.Services.AddScoped<IReposatory<Gallary>,GallaryRepository>();
+builder.Services.AddScoped<IFilter<Gallary>, GallaryRepository>();
 // connection String
 string connectionString = builder.Configuration.GetConnectionString("Sara");
 builder.Services.AddDbContext<Context>(optionBuilder =>
