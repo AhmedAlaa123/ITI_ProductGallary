@@ -258,7 +258,7 @@ namespace ProductGallary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Order_Id")
+                    b.Property<Guid?>("ProductListId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("User_Id")
@@ -267,13 +267,23 @@ namespace ProductGallary.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Order_Id")
-                        .IsUnique();
+                    b.HasIndex("ProductListId");
 
                     b.HasIndex("User_Id")
                         .IsUnique();
 
                     b.ToTable("Cart");
+                });
+
+            modelBuilder.Entity("ProductGallary.Models.CartProductList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderProductList");
                 });
 
             modelBuilder.Entity("ProductGallary.Models.Category", b =>
@@ -331,31 +341,27 @@ namespace ProductGallary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("Cart_Id")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("OrderProductListId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("User_Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderProductListId");
+                    b.HasIndex("Cart_Id")
+                        .IsUnique()
+                        .HasFilter("[Cart_Id] IS NOT NULL");
+
+                    b.HasIndex("User_Id");
 
                     b.ToTable("Order");
-                });
-
-            modelBuilder.Entity("ProductGallary.Models.OrderProductList", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OrderProductList");
                 });
 
             modelBuilder.Entity("ProductGallary.Models.Product", b =>
@@ -475,11 +481,9 @@ namespace ProductGallary.Migrations
 
             modelBuilder.Entity("ProductGallary.Models.Cart", b =>
                 {
-                    b.HasOne("ProductGallary.Models.Order", "Order")
-                        .WithOne("Cart")
-                        .HasForeignKey("ProductGallary.Models.Cart", "Order_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ProductGallary.Models.CartProductList", "ProductList")
+                        .WithMany("Carts")
+                        .HasForeignKey("ProductListId");
 
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithOne("Cart")
@@ -487,7 +491,7 @@ namespace ProductGallary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Order");
+                    b.Navigation("ProductList");
 
                     b.Navigation("User");
                 });
@@ -512,13 +516,17 @@ namespace ProductGallary.Migrations
 
             modelBuilder.Entity("ProductGallary.Models.Order", b =>
                 {
-                    b.HasOne("ProductGallary.Models.OrderProductList", "OrderProductList")
-                        .WithMany("Orders")
-                        .HasForeignKey("OrderProductListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ProductGallary.Models.Cart", "Cart")
+                        .WithOne("Order")
+                        .HasForeignKey("ProductGallary.Models.Order", "Cart_Id");
 
-                    b.Navigation("OrderProductList");
+                    b.HasOne("ProductGallary.Models.ApplicationUser", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("User_Id");
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ProductGallary.Models.Product", b =>
@@ -531,7 +539,7 @@ namespace ProductGallary.Migrations
                         .WithMany("Products")
                         .HasForeignKey("Gallary_Id");
 
-                    b.HasOne("ProductGallary.Models.OrderProductList", "OrderProductList")
+                    b.HasOne("ProductGallary.Models.CartProductList", "OrderProductList")
                         .WithMany("Products")
                         .HasForeignKey("OrderProductListId");
 
@@ -557,6 +565,20 @@ namespace ProductGallary.Migrations
 
                     b.Navigation("Gallaries");
 
+                    b.Navigation("Orders");
+
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ProductGallary.Models.Cart", b =>
+                {
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("ProductGallary.Models.CartProductList", b =>
+                {
+                    b.Navigation("Carts");
+
                     b.Navigation("Products");
                 });
 
@@ -574,16 +596,6 @@ namespace ProductGallary.Migrations
                 {
                     b.Navigation("Bill")
                         .IsRequired();
-
-                    b.Navigation("Cart")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProductGallary.Models.OrderProductList", b =>
-                {
-                    b.Navigation("Orders");
-
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

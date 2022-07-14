@@ -11,7 +11,7 @@ namespace ProductGallary.Models
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Gallary> Gallaries { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<OrderProductList> OrderProductLists { get; set; }
+        public virtual DbSet<CartProductList> CartProductLists { get; set; }
         public virtual DbSet<Product> Products { get; set; }
 
 

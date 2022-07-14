@@ -16,10 +16,15 @@ namespace ProductGallary.Models
         [Required,DataType(DataType.DateTime)]
         public DateTime DeliveryDate { get; set; }
 
+        [ForeignKey("User")]
+        public string? User_Id { get; set; }
+
+        public ApplicationUser? User { get; set; }
+
         public Bill Bill { get; set; }
 
-        public OrderProductList OrderProductList { get; set; }
-
+        [ForeignKey("Cart")]
+        public Guid? Cart_Id { get; set; }
         public Cart Cart{ get; set; }
 
 

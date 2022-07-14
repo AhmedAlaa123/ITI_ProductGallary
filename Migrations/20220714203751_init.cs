@@ -206,23 +206,27 @@ namespace ProductGallary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "Cart",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderProductListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductListId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.PrimaryKey("PK_Cart", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Order_OrderProductList_OrderProductListId",
-                        column: x => x.OrderProductListId,
-                        principalTable: "OrderProductList",
+                        name: "FK_Cart_AspNetUsers_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Cart_OrderProductList_ProductListId",
+                        column: x => x.ProductListId,
+                        principalTable: "OrderProductList",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -267,6 +271,31 @@ namespace ProductGallary.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Cart_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Order_AspNetUsers_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Order_Cart_Cart_Id",
+                        column: x => x.Cart_Id,
+                        principalTable: "Cart",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Bill",
                 columns: table => new
                 {
@@ -280,31 +309,6 @@ namespace ProductGallary.Migrations
                     table.ForeignKey(
                         name: "FK_Bill_Order_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Order",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cart",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    User_Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Order_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cart", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cart_AspNetUsers_User_Id",
-                        column: x => x.User_Id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Cart_Order_Order_Id",
-                        column: x => x.Order_Id,
                         principalTable: "Order",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
@@ -356,10 +360,9 @@ namespace ProductGallary.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cart_Order_Id",
+                name: "IX_Cart_ProductListId",
                 table: "Cart",
-                column: "Order_Id",
-                unique: true);
+                column: "ProductListId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cart_User_Id",
@@ -378,9 +381,16 @@ namespace ProductGallary.Migrations
                 column: "User_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_OrderProductListId",
+                name: "IX_Order_Cart_Id",
                 table: "Order",
-                column: "OrderProductListId");
+                column: "Cart_Id",
+                unique: true,
+                filter: "[Cart_Id] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_User_Id",
+                table: "Order",
+                column: "User_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_Category_Id",
@@ -424,9 +434,6 @@ namespace ProductGallary.Migrations
                 name: "Bill");
 
             migrationBuilder.DropTable(
-                name: "Cart");
-
-            migrationBuilder.DropTable(
                 name: "Product");
 
             migrationBuilder.DropTable(
@@ -442,10 +449,13 @@ namespace ProductGallary.Migrations
                 name: "Gallary");
 
             migrationBuilder.DropTable(
-                name: "OrderProductList");
+                name: "Cart");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "OrderProductList");
         }
     }
 }

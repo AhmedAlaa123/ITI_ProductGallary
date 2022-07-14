@@ -23,15 +23,15 @@ namespace ProductGallary.Controllers
         {
             return View();
         }
-        public IActionResult addtocart(Carttdo carttdo)
+        public IActionResult addtocart()
         {
             if (ModelState.IsValid)
             {
             Cart cart = new Cart();
 
-            var userID = userManger.GetUserId(HttpContext.User);
-            cart.User_Id = userID;
-            cart.Order_Id = carttdo.Order_Id;
+            //var userID = userManger.GetUserId(HttpContext.User);
+            //cart.User_Id = userID;
+            //cart.Order_Id = carttdo.Order_Id;
             
             cartrepo.Add(cart);
             return View("shoppingcart");

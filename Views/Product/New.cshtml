@@ -33,7 +33,7 @@
   </div> 
  <div>
         <label asp-for="HasDiscount" >هل هناك خصم </label>
-        <input name="HasDiscount" type ="checkbox" onclick="myFunction()" id="myCheck" />
+        <input name="HasDiscount" type ="checkbox" value="True" onclick="myFunction()" id="myCheck" />
         <span asp-validation-for="HasDiscount" class="text-danger"></span>
 
  </div>
@@ -73,10 +73,10 @@
 
 <script>
     function myFunction() {
-  var checkBox = document.getElementById("myCheck");
+  var checkBox = document.getElementById("myCheck").checked;
   var text = document.getElementById("text");
   var text1 = document.getElementById("text1");
-  if (checkBox.checked == true){
+  if (checkBox == true){
     text.style.display = "block";
     text1.style.display = "block";
   } else {

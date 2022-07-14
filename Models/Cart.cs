@@ -15,10 +15,9 @@ namespace ProductGallary.Models
 
         public ApplicationUser? User { get; set; }
 
-        [ForeignKey("Order")]
-        public Guid? Order_Id { get; set; }
 
         public Order? Order { get; set; }
+        public CartProductList? ProductList { get; set; }
 
 
     }
