@@ -7,6 +7,7 @@ namespace ProductGallary.Reposatories
         bool Add(Cart item);
         bool Delete(Guid id);
         Cart GetById(Guid id);
+        List<Cart> GetAll();
 
 
     }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductGallary.Models;
 
@@ -11,9 +12,10 @@ using ProductGallary.Models;
 namespace ProductGallary.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220715122256_init4")]
+    partial class init4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace ProductGallary.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("CartProduct", b =>
-                {
-                    b.Property<Guid>("cartsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("productsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("cartsId", "productsId");
-
-                    b.HasIndex("productsId");
-
-                    b.ToTable("CartProduct");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -267,6 +254,27 @@ namespace ProductGallary.Migrations
                     b.ToTable("Bill");
                 });
 
+            modelBuilder.Entity("ProductGallary.Models.CardProductList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("cart_id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("product_id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("cart_id");
+
+                    b.HasIndex("product_id");
+
+                    b.ToTable("CartProductLists");
+                });
+
             modelBuilder.Entity("ProductGallary.Models.Cart", b =>
                 {
                     b.Property<Guid>("Id")
@@ -411,21 +419,6 @@ namespace ProductGallary.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("CartProduct", b =>
-                {
-                    b.HasOne("ProductGallary.Models.Cart", null)
-                        .WithMany()
-                        .HasForeignKey("cartsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProductGallary.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("productsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -486,6 +479,25 @@ namespace ProductGallary.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("ProductGallary.Models.CardProductList", b =>
+                {
+                    b.HasOne("ProductGallary.Models.Cart", "Cart")
+                        .WithMany("CardProductList")
+                        .HasForeignKey("cart_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProductGallary.Models.Product", "product")
+                        .WithMany("CardProductList")
+                        .HasForeignKey("product_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("ProductGallary.Models.Cart", b =>
@@ -569,6 +581,8 @@ namespace ProductGallary.Migrations
 
             modelBuilder.Entity("ProductGallary.Models.Cart", b =>
                 {
+                    b.Navigation("CardProductList");
+
                     b.Navigation("Order");
                 });
 
@@ -586,6 +600,11 @@ namespace ProductGallary.Migrations
                 {
                     b.Navigation("Bill")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ProductGallary.Models.Product", b =>
+                {
+                    b.Navigation("CardProductList");
                 });
 #pragma warning restore 612, 618
         }

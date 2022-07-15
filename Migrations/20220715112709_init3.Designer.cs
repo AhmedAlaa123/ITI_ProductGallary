@@ -12,8 +12,8 @@ using ProductGallary.Models;
 namespace ProductGallary.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220714203751_init")]
-    partial class init
+    [Migration("20220715112709_init3")]
+    partial class init3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -254,13 +254,24 @@ namespace ProductGallary.Migrations
                     b.ToTable("Bill");
                 });
 
+            modelBuilder.Entity("ProductGallary.Models.CardProductList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CartProductLists");
+                });
+
             modelBuilder.Entity("ProductGallary.Models.Cart", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProductListId")
+                    b.Property<Guid?>("CardProductListId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("User_Id")
@@ -269,23 +280,12 @@ namespace ProductGallary.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductListId");
+                    b.HasIndex("CardProductListId");
 
                     b.HasIndex("User_Id")
                         .IsUnique();
 
                     b.ToTable("Cart");
-                });
-
-            modelBuilder.Entity("ProductGallary.Models.CartProductList", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OrderProductList");
                 });
 
             modelBuilder.Entity("ProductGallary.Models.Category", b =>
@@ -372,6 +372,9 @@ namespace ProductGallary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CardProductListId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("Category_Id")
                         .HasColumnType("uniqueidentifier");
 
@@ -396,9 +399,6 @@ namespace ProductGallary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OrderProductListId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<float?>("Price")
                         .IsRequired()
                         .HasColumnType("real");
@@ -408,11 +408,11 @@ namespace ProductGallary.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CardProductListId");
+
                     b.HasIndex("Category_Id");
 
                     b.HasIndex("Gallary_Id");
-
-                    b.HasIndex("OrderProductListId");
 
                     b.HasIndex("User_Id");
 
@@ -483,9 +483,9 @@ namespace ProductGallary.Migrations
 
             modelBuilder.Entity("ProductGallary.Models.Cart", b =>
                 {
-                    b.HasOne("ProductGallary.Models.CartProductList", "ProductList")
+                    b.HasOne("ProductGallary.Models.CardProductList", "CardProductList")
                         .WithMany("Carts")
-                        .HasForeignKey("ProductListId");
+                        .HasForeignKey("CardProductListId");
 
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithOne("Cart")
@@ -493,7 +493,7 @@ namespace ProductGallary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProductList");
+                    b.Navigation("CardProductList");
 
                     b.Navigation("User");
                 });
@@ -533,6 +533,10 @@ namespace ProductGallary.Migrations
 
             modelBuilder.Entity("ProductGallary.Models.Product", b =>
                 {
+                    b.HasOne("ProductGallary.Models.CardProductList", "CardProductList")
+                        .WithMany("Products")
+                        .HasForeignKey("CardProductListId");
+
                     b.HasOne("ProductGallary.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("Category_Id");
@@ -541,19 +545,15 @@ namespace ProductGallary.Migrations
                         .WithMany("Products")
                         .HasForeignKey("Gallary_Id");
 
-                    b.HasOne("ProductGallary.Models.CartProductList", "OrderProductList")
-                        .WithMany("Products")
-                        .HasForeignKey("OrderProductListId");
-
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithMany("Products")
                         .HasForeignKey("User_Id");
 
+                    b.Navigation("CardProductList");
+
                     b.Navigation("Category");
 
                     b.Navigation("Gallary");
-
-                    b.Navigation("OrderProductList");
 
                     b.Navigation("User");
                 });
@@ -572,16 +572,16 @@ namespace ProductGallary.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("ProductGallary.Models.Cart", b =>
-                {
-                    b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("ProductGallary.Models.CartProductList", b =>
+            modelBuilder.Entity("ProductGallary.Models.CardProductList", b =>
                 {
                     b.Navigation("Carts");
 
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ProductGallary.Models.Cart", b =>
+                {
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ProductGallary.Models.Category", b =>

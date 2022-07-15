@@ -15,10 +15,9 @@ namespace ProductGallary.Models
 
         public ApplicationUser? User { get; set; }
 
-
         public Order? Order { get; set; }
-        public CartProductList? ProductList { get; set; }
 
+        public List<Product> products { get; set; } = new List<Product>();
 
     }
 }

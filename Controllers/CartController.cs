@@ -11,30 +11,33 @@ namespace ProductGallary.Controllers
         private readonly UserManager<ApplicationUser> userManger;
 
         CartInterface cartrepo;
+        IReposatory<Product> reposatory;
 
-        public CartController(CartInterface cartrepo, UserManager<ApplicationUser> userManger)
+        public CartController(CartInterface cartrepo, UserManager<ApplicationUser> userManger, IReposatory<Product> reposatory)
         {
             this.cartrepo = cartrepo;
             this.userManger = userManger;
-            
+            this.reposatory = reposatory;
         }
 
         public IActionResult shoppingcart()
         {
-            return View();
+            var cart = cartrepo.GetAll(); 
+            return View(cart);
         }
-        public IActionResult addtocart()
+        [HttpPost]
+        public IActionResult addtocart(Guid id)
         {
+            var p = reposatory.GetById(id);
             if (ModelState.IsValid)
             {
             Cart cart = new Cart();
-
-            //var userID = userManger.GetUserId(HttpContext.User);
-            //cart.User_Id = userID;
-            //cart.Order_Id = carttdo.Order_Id;
-            
+            var userID = userManger.GetUserId(HttpContext.User);
+            cart.User_Id = userID;
+            cart.products.Add(p);
+            //Console.WriteLine(cart.products);
             cartrepo.Add(cart);
-            return View("shoppingcart");
+            return RedirectToAction("shoppingcart");
             }
             return Redirect("Details");
         }

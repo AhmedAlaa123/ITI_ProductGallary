@@ -22,7 +22,7 @@ namespace ProductGallary.Reposatories
             }
             catch (Exception)
             {
-;
+
                 return false;
             }
         }
@@ -42,6 +42,10 @@ namespace ProductGallary.Reposatories
             }
         }
 
+        public List<Cart> GetAll()
+        {
+            return context.Carts.Include(c=>c.products).ToList();
+        }
 
         public Cart GetById(Guid id)
         {

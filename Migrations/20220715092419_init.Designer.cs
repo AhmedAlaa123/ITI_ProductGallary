@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductGallary.Models;
 
@@ -11,9 +12,10 @@ using ProductGallary.Models;
 namespace ProductGallary.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220715092419_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace ProductGallary.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("CartProduct", b =>
-                {
-                    b.Property<Guid>("cartsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("productsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("cartsId", "productsId");
-
-                    b.HasIndex("productsId");
-
-                    b.ToTable("CartProduct");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -273,16 +260,32 @@ namespace ProductGallary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ProductListId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("User_Id")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductListId");
+
                     b.HasIndex("User_Id")
                         .IsUnique();
 
                     b.ToTable("Cart");
+                });
+
+            modelBuilder.Entity("ProductGallary.Models.CartProductList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CartProductList");
                 });
 
             modelBuilder.Entity("ProductGallary.Models.Category", b =>
@@ -393,6 +396,9 @@ namespace ProductGallary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("OrderProductListId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<float?>("Price")
                         .IsRequired()
                         .HasColumnType("real");
@@ -406,24 +412,11 @@ namespace ProductGallary.Migrations
 
                     b.HasIndex("Gallary_Id");
 
+                    b.HasIndex("OrderProductListId");
+
                     b.HasIndex("User_Id");
 
                     b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("CartProduct", b =>
-                {
-                    b.HasOne("ProductGallary.Models.Cart", null)
-                        .WithMany()
-                        .HasForeignKey("cartsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProductGallary.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("productsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -490,11 +483,17 @@ namespace ProductGallary.Migrations
 
             modelBuilder.Entity("ProductGallary.Models.Cart", b =>
                 {
+                    b.HasOne("ProductGallary.Models.CartProductList", "ProductList")
+                        .WithMany("Carts")
+                        .HasForeignKey("ProductListId");
+
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithOne("Cart")
                         .HasForeignKey("ProductGallary.Models.Cart", "User_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ProductList");
 
                     b.Navigation("User");
                 });
@@ -542,6 +541,10 @@ namespace ProductGallary.Migrations
                         .WithMany("Products")
                         .HasForeignKey("Gallary_Id");
 
+                    b.HasOne("ProductGallary.Models.CartProductList", "OrderProductList")
+                        .WithMany("Products")
+                        .HasForeignKey("OrderProductListId");
+
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithMany("Products")
                         .HasForeignKey("User_Id");
@@ -549,6 +552,8 @@ namespace ProductGallary.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Gallary");
+
+                    b.Navigation("OrderProductList");
 
                     b.Navigation("User");
                 });
@@ -570,6 +575,13 @@ namespace ProductGallary.Migrations
             modelBuilder.Entity("ProductGallary.Models.Cart", b =>
                 {
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("ProductGallary.Models.CartProductList", b =>
+                {
+                    b.Navigation("Carts");
+
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ProductGallary.Models.Category", b =>

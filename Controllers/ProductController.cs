@@ -16,12 +16,13 @@ namespace ProductGallary.Controllers
         IReposatory<Category> CategRepo;
         IReposatory<Gallary> reposatory;
         IFilter<Gallary> filter;
+        CartInterface cart;
         private readonly UserManager<ApplicationUser> userManger;
         IWebHostEnvironment webHostEnvironment;
         //DI dependance injection (constructor)
         public ProductController(IReposatory<Product> _productRepo, IWebHostEnvironment webHostEnvironment , 
             IReposatory<Category> _CategRepo , IReposatory<Gallary> reposatory,UserManager<ApplicationUser> userManger,
-            IFilter<Gallary> _filter)
+            IFilter<Gallary> _filter, CartInterface _cart)
         {
             ProductRepo = _productRepo;
             CategRepo = _CategRepo;
@@ -29,6 +30,7 @@ namespace ProductGallary.Controllers
             this.filter = _filter;
             this.userManger = userManger;
             this.webHostEnvironment = webHostEnvironment;
+            this.cart = _cart;
         }
         //image upload
         //get all products
@@ -67,8 +69,6 @@ namespace ProductGallary.Controllers
 
            ViewData["CategoryList"] = CategRepo.GetAll();
             ViewData["GallaryList"] = reposatory.GetAll();
-
-
             if (ModelState.IsValid == true)
             {
                 Product xproduct = new Product();
@@ -83,6 +83,8 @@ namespace ProductGallary.Controllers
                 xproduct.Name=createTDO.Name;
                 xproduct.Image= uniqueFileName;
                 xproduct.Price=createTDO.Price;
+                var userID = userManger.GetUserId(HttpContext.User);
+                xproduct.User_Id = userID;
                 xproduct.HasDiscount=createTDO.HasDiscount;
                 xproduct.DiscountPercentage = createTDO.DiscountPercentage;
                 xproduct.Description = createTDO.Description;
