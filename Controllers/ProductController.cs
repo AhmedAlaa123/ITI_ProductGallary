@@ -14,13 +14,22 @@ namespace ProductGallary.Controllers
         //DIP
         IReposatory<Product> ProductRepo;
         IReposatory<Category> CategRepo;
+        IReposatory<Gallary> reposatory;
+        IFilter<Gallary> filter;
+        IProduct<Product> progal;
         private readonly UserManager<ApplicationUser> userManger;
         IWebHostEnvironment webHostEnvironment;
         //DI dependance injection (constructor)
-        public ProductController(IReposatory<Product> _productRepo, IWebHostEnvironment webHostEnvironment , IReposatory<Category> _CategRepo , UserManager<ApplicationUser> userManger)
+        public ProductController(IReposatory<Product> _productRepo, IWebHostEnvironment webHostEnvironment,
+            IReposatory<Category> _CategRepo, IReposatory<Gallary> reposatory, UserManager<ApplicationUser> userManger,
+            IFilter<Gallary> _filter, IProduct<Product> _product)
         {
             ProductRepo = _productRepo;
             CategRepo = _CategRepo;
+            this.reposatory = reposatory;
+            this.filter = _filter;
+            this.progal = _product;
+            this.userManger = userManger;
             this.webHostEnvironment = webHostEnvironment;
         }
         //image upload
@@ -28,6 +37,7 @@ namespace ProductGallary.Controllers
 
         public IActionResult Index()
         {
+
             var xProduct = ProductRepo.GetAll();
 
             return View(xProduct);
@@ -44,7 +54,11 @@ namespace ProductGallary.Controllers
         [Authorize(Roles = $"{Roles.BUYER_ROLE}")]
         public IActionResult New()
         {
+            var userID = userManger.GetUserId(HttpContext.User);
+            var xgallary = filter.filter(userID);
             ViewData["CategoryList"] = CategRepo.GetAll();
+            ViewData["GallaryList"] = xgallary;
+
             return View(new ProductCreateTDO());
         }
         [HttpPost]
@@ -53,7 +67,10 @@ namespace ProductGallary.Controllers
         public IActionResult Savenew(ProductCreateTDO createTDO)
 
         {
-           ViewData["CategoryList"] = CategRepo.GetAll();
+            var userID = userManger.GetUserId(HttpContext.User);
+            var xgallary = filter.filter(userID);
+            ViewData["CategoryList"] = CategRepo.GetAll();
+            ViewData["GallaryList"] = xgallary;
 
 
             if (ModelState.IsValid == true)
@@ -67,12 +84,15 @@ namespace ProductGallary.Controllers
                     createTDO.Image.CopyTo(fileStream);
                     fileStream.Close();
                 }
-                xproduct.Name=createTDO.Name;
-                xproduct.Image= uniqueFileName;
-                xproduct.Price=createTDO.Price;
-                xproduct.HasDiscount=createTDO.HasDiscount;
+                xproduct.Name = createTDO.Name;
+                xproduct.Image = uniqueFileName;
+                xproduct.Price = createTDO.Price;
+                xproduct.HasDiscount = createTDO.HasDiscount;
                 xproduct.DiscountPercentage = createTDO.DiscountPercentage;
                 xproduct.Description = createTDO.Description;
+                xproduct.Category_Id = createTDO.Category_Id;
+                xproduct.Gallary_Id = createTDO.Gallary_Id;
+                xproduct.User_Id = userID;
                 ProductRepo.Insert(xproduct);
                 return RedirectToAction("Index");
             }
@@ -87,7 +107,11 @@ namespace ProductGallary.Controllers
 
         public IActionResult Update(Guid id)
         {
+            var userID = userManger.GetUserId(HttpContext.User);
+            var xgallary = filter.filter(userID);
             ViewData["CategoryList"] = CategRepo.GetAll();
+            ViewData["GallaryList"] = xgallary;
+
             var oldproduct = ProductRepo.GetById(id);
             return View(oldproduct);
         }
@@ -95,7 +119,11 @@ namespace ProductGallary.Controllers
 
         public IActionResult Saveupdate(Guid id, Product newproduct)
         {
+            var userID = userManger.GetUserId(HttpContext.User);
+            var xgallary = filter.filter(userID);
             ViewData["CategoryList"] = CategRepo.GetAll();
+            ViewData["GallaryList"] = xgallary;
+
 
             if (ModelState.IsValid)
             {
@@ -104,7 +132,7 @@ namespace ProductGallary.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View("Edit", newproduct);
+            return View("Update", newproduct);
 
         }
 
@@ -114,7 +142,7 @@ namespace ProductGallary.Controllers
 
         public IActionResult Delete(Guid id)
         {
-            Product oldproduct =ProductRepo.GetById(id);
+            Product oldproduct = ProductRepo.GetById(id);
             return View(oldproduct);
 
         }
@@ -125,7 +153,40 @@ namespace ProductGallary.Controllers
             ProductRepo.Delete(id);
             return RedirectToAction("Index");
         }
-        
+
+
+
+        // make user modify his products only
+        public IActionResult modifyproducts(string id)
+        {
+
+            var vproducts = progal.GetAllProductsWithGallaryData(id);
+
+            return View("modifyproducts", vproducts);
+
+        }
+
+        //show products in specific category
+        public IActionResult showproductatcategory(Guid id)
+        {
+
+            var vproducts = progal.GetAllProductsWithCategoryData(id);
+
+            return View(vproducts);
+
+        }
+
+        //show products in specific gallary
+
+        public IActionResult showproductatgallary(Guid id)
+        {
+
+            var vproducts = progal.GetAllProductsWithGallaryId(id);
+
+            return View(vproducts);
+
+        }
+
 
     }
 }

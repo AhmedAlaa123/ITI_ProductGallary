@@ -1,0 +1,67 @@
+﻿
+
+<!-- Navigation--> 
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#page-top"> حرف</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars ms-1"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/Category/Index">الفئات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Gallary/Index">المعارض</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Product/Index">المنتجات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Gallary/Index">المعارض</a></li>
+                    
+                    @*<li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>*@
+
+                     <li class="nav-item">
+                               @if (User.Identity.IsAuthenticated && User.IsInRole(role: Roles.BUYER_ROLE))
+                               {
+                                   <a class="nav-link" asp-area="" asp-controller="Gallary" asp-action="Dashboard" asp-route-id="">لوحة النحكم</a>
+
+                               }
+                     </li>
+
+                </ul>
+               @* <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0"></ul>
+                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0"></ul>*@
+                
+                <ul class="navbar-nav me-auto order-0 ">
+                        @if(!User.Identity.IsAuthenticated){
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">انشاء حساب</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="LogIn">تسجيل الدخول</a>
+                        </li>
+                        }else{
+                            <li class="nav-item">
+                            <a class="btn btn-outline-danger" asp-area="" asp-controller="Account" asp-action="SignOut">تسجيل الخروج</a>
+                        </li>
+                        if (User.IsInRole(role: Roles.ADMIN_ROLE)) // check if user is admin to add new admins
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="AdminRegister">اضافه مشرفين</a>
+                            </li>
+                        }
+
+
+                        }
+                </ul>
+                 @if(User.Identity.IsAuthenticated)
+                    {
+                        <h2 class='text-warning m-3 user-name' >@(User.Identity.Name.ToUpper())</h2>
+                    }
+
+            </div>
+        </div>
+ </nav>
+
+
+
+@*                    <img src="/assets/img/navbar-logo.svg" alt="..." />*@

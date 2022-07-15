@@ -76,5 +76,14 @@ namespace ProductGallary.Controllers
             return RedirectToAction("Index");
         }
 
+
+        // details of category 
+
+        public IActionResult Details(Guid id)
+        {
+            Category gal = CategRepo.GetById(id);
+            return View(gal);
+        }
+
     }
 }

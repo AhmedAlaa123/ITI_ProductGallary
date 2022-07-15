@@ -13,15 +13,9 @@
         // update
         bool Update(Guid id,T item);    
 
-
-        
-
         // delete Item
         bool Delete(Guid Id);    
-
-
-        // delete
-        bool Delete(Guid id);
+    
 
 
     }

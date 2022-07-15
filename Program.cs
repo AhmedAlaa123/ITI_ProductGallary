@@ -16,6 +16,7 @@ builder.Services.AddScoped<IReposatory<Category>, CategoryRepository>();
 
 builder.Services.AddScoped<IReposatory<Gallary>,GallaryRepository>();
 builder.Services.AddScoped<IFilter<Gallary>, GallaryRepository>();
+builder.Services.AddScoped<IProduct<Product>, ProductReposatory>();
 // connection String
 string connectionString = builder.Configuration.GetConnectionString("Mona");
 //string connectionString = builder.Configuration.GetConnectionString("Sara");

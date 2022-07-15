@@ -23,6 +23,9 @@ namespace ProductGallary.TDO
 
         [ForeignKey("Category")]
         public Guid? Category_Id { get; set; }
+        
+        [ForeignKey("Gallary")]
+        public Guid? Gallary_Id { get; set; }
 
     }
 }
