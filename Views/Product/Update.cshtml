@@ -28,7 +28,7 @@
     <input  asp-for="Price" class="form-control">
      <span asp-validation-for="Price" class="text-danger"></span>
   </div> 
-<div>
+@*<div>
          <label asp-for="HasDiscount" >هل هناك خصم </label>
         @if (Model.HasDiscount == true)
         {
@@ -39,7 +39,7 @@
         }
         <span asp-validation-for="HasDiscount" class="text-danger"></span>
 
-</div>
+</div>*@
    
 <div >
     <label asp-for="DiscountPercentage" >قيمة الخصم   </label>  
