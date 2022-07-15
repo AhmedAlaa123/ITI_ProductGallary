@@ -52,7 +52,7 @@ namespace ProductGallary.Controllers
                     
                     cart.User_Id = userID;
                     cart.products.Add(p);
-                    //Console.WriteLine(cart.products);
+                    Console.WriteLine(cart.products);
                     cartrepo.Add(cart);
                     return RedirectToAction("index");
                 }
