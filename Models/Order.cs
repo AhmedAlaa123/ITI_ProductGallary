@@ -19,7 +19,6 @@ namespace ProductGallary.Models
         [DefaultValue(false)]
         public bool IsCanceled { get; set; }
 
-
         [ForeignKey("User")]
         public string? User_Id { get; set; }
 

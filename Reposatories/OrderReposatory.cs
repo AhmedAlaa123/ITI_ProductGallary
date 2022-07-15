@@ -41,7 +41,7 @@ namespace ProductGallary.Reposatories
             List<Order> orders = this.context.Orders.
                                 Include(or => or.Bill).
                                 Include(or => or.Cart).
-                                Include(or => or.OrderProductList).ToList();
+                                ToList();
 
             // return orders
             return orders;
@@ -51,7 +51,7 @@ namespace ProductGallary.Reposatories
         public Order GetById(Guid id)
         {
             Order order = context.Orders.
-                                Include(or => or.OrderProductList).
+                               
                                 Include(or => or.Bill).
                                 Include(or => or.Cart).
                                 FirstOrDefault(o => o.Id == id);

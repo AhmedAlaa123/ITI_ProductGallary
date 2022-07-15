@@ -25,63 +25,64 @@ namespace ProductGallary.Controllers
         private List<OrderInfoDTO> getOrders(List<Order> orders)
         {
                 List<OrderInfoDTO> orderInfoDTOs = new List<OrderInfoDTO>();
-                foreach (Order order in orders)
+            foreach (Order order in orders)
+            {
+                OrderInfoDTO orderInfoDTO = new OrderInfoDTO
                 {
-                    OrderInfoDTO orderInfoDTO = new OrderInfoDTO
+                    Id = order.Id,
+                    DeliveryDate = order.DeliveryDate,
+                    OrderDate = order.OrderDate,
+                    IsCanceled = order.IsCanceled,
+                };
+
+                // List Of Products Info
+                List<ProductInfoDTO> productInfoDTOs = new List<ProductInfoDTO>();
+                foreach (Product product in order.Cart.products)
+                {
+                    ProductInfoDTO productInfo = new ProductInfoDTO
                     {
-                        Id = order.Id,
-                        DeliveryDate = order.DeliveryDate,
-                        OrderDate = order.OrderDate,
-                        IsCanceled = order.IsCanceled,
+                        Name = product.Name,
+                        Image = product.Image,
+                        Price = (bool)product.HasDiscount ? (product.DiscountPercentage / 100) * product.Price : product.Price
                     };
-
-                    // List Of Products Info
-                    List<ProductInfoDTO> productInfoDTOs = new List<ProductInfoDTO>();
-                    foreach (Product product in order.OrderProductList.Products)
-                    {
-                        ProductInfoDTO productInfo = new ProductInfoDTO
-                        {
-                            Name = product.Name,
-                            Image = product.Image,
-                            Price = (bool)product.HasDiscount ? (product.DiscountPercentage / 100) * product.Price : product.Price
-                        };
-                        productInfoDTOs.Add(productInfo);
-                    }
-                    // add products to orders
-                    orderInfoDTO.Products = productInfoDTOs;
-
-                    orderInfoDTOs.Add(orderInfoDTO);
-
+                    productInfoDTOs.Add(productInfo);
                 }
+                // add products to orders
+                orderInfoDTO.Products = productInfoDTOs;
+
+                orderInfoDTOs.Add(orderInfoDTO);
+
+            }
             return orderInfoDTOs;
         }
 
-        [Authorize(Roles =$"{Roles.BUYER_ROLE},{Roles.ADMIN_ROLE}")]
+        //[Authorize(Roles =$"{Roles.BUYER_ROLE},{Roles.ADMIN_ROLE}")]
         public async Task<IActionResult> Index()
         {
-                
-           // var userId = userManger.GetUserId(HttpContext.User);
-           //ApplicationUser user=await userManger.FindByIdAsync(userId);
 
-           // if(await userManger.IsInRoleAsync(user,Roles.ADMIN_ROLE))
-           // {
-           //     // print all Orders To Admin
-           //    // List<Order> orders = this.orderReposatory.GetAll();
-           //     //List<OrderInfoDTO> orderInfoDTOs = getOrders(orders);
-           //     return View(orderInfoDTOs);
-                
-           // }
-           // else if (await userManger.IsInRoleAsync(user, Roles.BUYER_ROLE))
-           // {
-           //     List<Order> orders=this.orderReposatory.GetAll().Where(order=>order.Cart.User_Id==user.Id).ToList();
-           //     List<OrderInfoDTO> orderInfoDTOs = getOrders(orders);
-           //     return View(orderInfoDTOs);
-           // }
-            
+            var userId = userManger.GetUserId(HttpContext.User);
+            ApplicationUser user = await userManger.FindByIdAsync(userId);
+
+            if(user!=null)
+            if (await userManger.IsInRoleAsync(user, Roles.ADMIN_ROLE))
+            {
+                // print all Orders To Admin
+                List<Order> orders = this.orderReposatory.GetAll();
+                List<OrderInfoDTO> orderInfoDTOs = getOrders(orders);
+                return View(orderInfoDTOs);
+
+            }
+            else if (await userManger.IsInRoleAsync(user, Roles.BUYER_ROLE))
+            {
+                List<Order> orders = this.orderReposatory.GetAll().Where(order => order.Cart.User_Id == user.Id).ToList();
+                List<OrderInfoDTO> orderInfoDTOs = getOrders(orders);
+                return View(orderInfoDTOs);
+            }
 
 
 
-            return Content("Wellcome in Orders");
+
+            return View("PageNotFound");
         }
     }
 }

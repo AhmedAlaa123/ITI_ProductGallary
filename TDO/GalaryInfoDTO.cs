@@ -4,8 +4,8 @@ namespace ProductGallary.TDO
         public class GalaryInfoDTO
         {
             public Guid Id { get; set; }
-        public string user_id { get; set; }
-        [Required, MinLength(3), MaxLength(20)]
+            public string user_id { get; set; }
+            [Required, MinLength(3), MaxLength(20)]
             public string Name { get; set; }
 
             [Required]

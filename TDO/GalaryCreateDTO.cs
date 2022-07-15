@@ -4,7 +4,7 @@ namespace ProductGallary.TDO
 {
     public class GalaryCreateDTO
     {
-        public string id { get; set; }  
+        
         [Required(ErrorMessage = "من فضلك ادخل اسم المعرض")]
         [MinLength(3, ErrorMessage = "يجب ان يكون الاسم اكثر من حرفين")]
         [MaxLength(20, ErrorMessage = "يجب ان يكون الاسم اقل من  عشرون حرفا")]
