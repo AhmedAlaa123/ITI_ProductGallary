@@ -3,7 +3,7 @@ using ProductGallary.Models;
 
 namespace ProductGallary.Reposatories
 {
-    public class CartRepository:CartInterface
+    public class CartRepository:CartInterface,IFilter<Cart>
     {
         Context context;
         public CartRepository(Context context)
@@ -40,6 +40,11 @@ namespace ProductGallary.Reposatories
             {
                 return false;
             }
+        }
+
+        public List<Cart> filter(string id)
+        {
+            return context.Carts.Include(c=>c.products).Where(e => e.User_Id == id).ToList();
         }
 
         public List<Cart> GetAll()
