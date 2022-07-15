@@ -44,16 +44,32 @@ namespace ProductGallary.Controllers
             var userID = userManger.GetUserId(HttpContext.User);
             if (userID!=null)
             {
-                Cart cart = new Cart();
-                var p = reposatory.GetById(id);
+                //Cart cart = new Cart();
+                //var p = reposatory.GetById(id);
                 if (ModelState.IsValid)
                 {
+                    List<Guid> products;
+                    if (ViewData[$"{Constant.PRODUCTS}"]==null)
+                    {
+                        products = new List<Guid>()
+                        {
+                            id
+                        };
+                        
+                    }
+                    else
+                    {
+                        products =(List<Guid>)ViewData[$"{Constant.PRODUCTS}"];
+                        products.Add(id);
+                        //ViewData[$"{Constant.PRODUCTS}"] = products;
 
-                    
-                    cart.User_Id = userID;
-                    cart.products.Add(p);
-                    Console.WriteLine(cart.products);
-                    cartrepo.Add(cart);
+
+                    }
+                    ViewData[$"{Constant.PRODUCTS}"] = products;
+                    //cart.User_Id = userID;
+                    //cart.products.Add(p);
+                    //Console.WriteLine(cart.products);
+                    //cartrepo.Add(cart);
                     return RedirectToAction("index");
                 }
                 return Redirect("Details");

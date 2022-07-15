@@ -1,6 +1,8 @@
 ﻿@model List<Product>
 @{
     ViewData["Title"] = "Index";
+    List<Guid> Products = new List<Guid>();
+
 }
 
 <h3> المنتجات </h3> <br />
@@ -28,12 +30,14 @@
                <a class="btn btn-success" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id">تعديل المنتج  </a><br>
                <a class="btn btn-success" asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id"> حذف المنتج </a>
             }
-            
+
         </div>
    }
   </div>
+   
   </div>
 <br />
 <br />
 <br />
 <br />
+
