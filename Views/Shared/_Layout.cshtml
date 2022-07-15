@@ -53,12 +53,13 @@
 
                                }
                         </li>
+                       
+                              @* @if (User.Identity.IsAuthenticated && User.IsInRole(role: Roles.BUYER_ROLE))
+                               {
+                                   <a class="nav-link text-info" asp-area="" asp-controller="Product" asp-action="modifyproducts" asp-route-id="">تعديل المنتجات </a>
 
-                         <li class="nav-item">
-                            <a class="nav-link text-info" asp-area="" asp-controller="order" asp-action="index">الطلبات</a>
-
-                        </li>
-
+                               }*@
+                        
                     </ul>
 
                      <ul class="navbar-nav ms-auto ">

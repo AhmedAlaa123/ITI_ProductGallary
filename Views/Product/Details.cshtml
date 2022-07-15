@@ -8,15 +8,16 @@
 <h3>تفاصيل المنتج </h3>
 
 <div class="card">
-        <img class="card-img-top" src="/Images/ProductImages/@Model.Image" alt="Card image" style="max-width:50%" >
-`       <div class="card-body">
-        <h5 class="card-title">@Model.Name</h5>
-         <p class="card-text"> وصف المنتج :  @Model.Description</p>
-         <p class="card-text"> السعر :  @Model.Price  جنيه </p>
+<img class="card-img-top" src="/Images/ProductImages/@Model.Image" alt="Card image" style="max-width:50%" >
+<div class="card-body">
+    <h5 class="card-title">@Model.Name</h5>
+    <p class="card-text"> وصف المنتج :  @Model.Description</p>
+    <p class="card-text"> السعر :  @Model.Price  جنيه </p>
+
             @if (Model.HasDiscount == true)
             {
                 <p class="card-text"> الخصم :  @Model.DiscountPercentage % </p>           
-                <p class="card-text"> السعر بعد الخصم : @(( Model.DiscountPercentage /100)*(Model.Price)) جنيه </p>
+                <p class="card-text"> السعر بعد الخصم : @((Model.Price )-(( Model.DiscountPercentage /100)*(Model.Price))) جنيه </p>
             }
   
     

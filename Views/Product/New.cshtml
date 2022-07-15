@@ -32,8 +32,8 @@
 
   </div> 
  <div>
-        <label asp-for="HasDiscount" >هل هناك خصم </label>
-        <input name="HasDiscount" type ="checkbox" value="True" onclick="myFunction()" id="myCheck" />
+       <label asp-for="HasDiscount" >هل هناك خصم </label>      
+       <input name="HasDiscount" onclick="myFunction()" id="myCheck" type ="checkbox"  />               
         <span asp-validation-for="HasDiscount" class="text-danger"></span>
 
  </div>
@@ -41,8 +41,19 @@
 
 <div >
     <p name="DiscountPercentage"id="text" style="display:none" >قيمة الخصم   </p>  
-    <input name="DiscountPercentage" id="text1"style="display:none"class="form-control" />      
+    <input name="DiscountPercentage" id="text1"style="display:none"class="form-control" />  
+        @if (Model.DiscountPercentage > 0)
+        {
+            <input name="HasDiscount" hidden value="true" />
+        }  
+        else
+        {
+            <input name="HasDiscount" hidden value="false" />
+
+        }
+
     <span asp-validation-for="DiscountPercentage" class="text-danger"></span>
+    
 </div>
  
     
@@ -73,7 +84,7 @@
 
 <script>
     function myFunction() {
-  var checkBox = document.getElementById("myCheck").checked;
+  var checkBox = document.getElementById("myCheck");    
   var text = document.getElementById("text");
   var text1 = document.getElementById("text1");
   if (checkBox == true){

@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Update";
    
-   ViewData["Title"] = "New";
         SelectList CategoryItems = 
             new SelectList(ViewBag.CategoryList,"Id","Name");
         SelectList GallaryItems = 
@@ -29,18 +28,18 @@
     <input  asp-for="Price" class="form-control">
      <span asp-validation-for="Price" class="text-danger"></span>
   </div> 
- <div>
-        <label asp-for="HasDiscount" >هل هناك خصم </label>
+<div>
+         <label asp-for="HasDiscount" >هل هناك خصم </label>
         @if (Model.HasDiscount == true)
         {
             <input name="HasDiscount" type ="checkbox" checked />
         }
-      else{
+      @if(Model.HasDiscount==false){
             <input name="HasDiscount" type ="checkbox"  />
         }
         <span asp-validation-for="HasDiscount" class="text-danger"></span>
 
- </div>
+</div>
    
 <div >
     <label asp-for="DiscountPercentage" >قيمة الخصم   </label>  
