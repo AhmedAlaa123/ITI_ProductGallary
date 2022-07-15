@@ -178,6 +178,7 @@ namespace ProductGallary.Controllers
         [HttpGet]
         public  async Task<IActionResult> SignOut()
         {
+            
             //sign out the user
             await this.signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");

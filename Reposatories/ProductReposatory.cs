@@ -38,11 +38,11 @@ namespace ProductGallary.Reposatories
 
         }
         public bool Update(Guid id, Product item)
-        {
+        {          
            
                 try
                  { 
-            
+                           
                 
                     Product OldProduct = GetById(id);
                     OldProduct.Name = item.Name;
@@ -52,7 +52,9 @@ namespace ProductGallary.Reposatories
                     OldProduct.DiscountPercentage = item.DiscountPercentage;
                     OldProduct.Description = item.Description;
                     OldProduct.User_Id = item.User_Id;
-
+                    OldProduct.Category_Id = item.Category_Id;
+                    OldProduct.Gallary_Id = item.Gallary_Id;
+                                 
                     context.SaveChanges();
                     return true;
                 
@@ -77,5 +79,16 @@ namespace ProductGallary.Reposatories
                 return false;
             }
         }
+
+        //from filter interface
+        //public List<Product> filter(string id)
+        //{
+        //    return context.Products.Where(x => x.User_Id == id).ToList();
+        //}
+
+
+
+
+
     }
 }
