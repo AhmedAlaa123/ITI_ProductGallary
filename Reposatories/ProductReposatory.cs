@@ -1,9 +1,10 @@
-﻿using ProductGallary.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductGallary.Models;
 
 
 namespace ProductGallary.Reposatories
 {
-    public class ProductReposatory: IReposatory<Product>
+    public class ProductReposatory: IReposatory<Product> , IProduct<Product> 
     {
       
         Context context;
@@ -38,12 +39,10 @@ namespace ProductGallary.Reposatories
 
         }
         public bool Update(Guid id, Product item)
-        {
-           
+        {          
                 try
                  { 
-            
-                
+                           
                     Product OldProduct = GetById(id);
                     OldProduct.Name = item.Name;
                     OldProduct.Image = item.Image;
@@ -52,7 +51,9 @@ namespace ProductGallary.Reposatories
                     OldProduct.DiscountPercentage = item.DiscountPercentage;
                     OldProduct.Description = item.Description;
                     OldProduct.User_Id = item.User_Id;
-
+                    OldProduct.Category_Id = item.Category_Id;
+                    OldProduct.Gallary_Id = item.Gallary_Id;
+                                 
                     context.SaveChanges();
                     return true;
                 
@@ -77,5 +78,24 @@ namespace ProductGallary.Reposatories
                 return false;
             }
         }
+
+        public List<Product> GetAllProductsWithCategoryData(Guid catid )
+        {
+            return context.Products.Where(e=>e.Category_Id==catid).ToList();
+        }
+        public List<Product> GetAllProductsWithGallaryId(Guid catid )
+        {
+            return context.Products.Where(e=>e.Gallary_Id==catid).ToList();
+        }
+
+
+
+        public List<Product> GetAllProductsWithGallaryData(string id )
+        {
+            return context.Products.Where(e=>e.User_Id==id).ToList();
+
+        }
+
+
     }
 }

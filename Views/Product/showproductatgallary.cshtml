@@ -1,6 +1,6 @@
 ﻿@model List<Product>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "showproductatgallary";
 }
 <style>
     .item {
@@ -21,20 +21,17 @@
 }
 </style>
 
-<h3> المنتجات </h3> <br />
-  @if (User.IsInRole("BUYER"))
-  {
-      <a class="btn btn-outline-dark" asp-controller="Product" asp-action="New" >اضافة منتج جديد  </a>  
-  }
+<h3>المنتجات </h3>
+
 
 <div class="container">
 <div class="row">
  
    @foreach (var item in @Model)
-        {
-            <div class="card col-4">
-                <a class="btn btn-dark" asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">
-                    <div class="item">
+   {     
+        <div class="card col-4">
+          <a class="btn btn-outline-dark" asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">        
+              <div class="item">
                         @if (item.DiscountPercentage > 0)
                         {
                             <span class="notify-badge">@item.DiscountPercentage %</span>
@@ -44,21 +41,17 @@
           <div class="card-body">
           <h4 class="card-title">أسم المنتج :  @item.Name</h4>
           <p class="card-text"> سعر المنتج  :@item.Price جنيه </p>
-            @if (item.DiscountPercentage > 0)
+          @if (item.DiscountPercentage > 0)
             {
              <p class="card-text"> السعر بعد الخصم : @((item.Price )-(( item.DiscountPercentage /100)*(item.Price))) جنيه </p>
         
             }
-            <p class="card-text"> وصف المنتج :@item.Description</p>
+          <p class="card-text"> وصف المنتج :@item.Description</p> 
+          </div> <br>
+          </a><br> 
           
-          </div>
-          </a>
-
-        </div>          
+        </div>
    }
   </div>
   </div>
-<br />
-<br />
-<br />
 <br />
