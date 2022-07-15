@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ProductGallary.Constants;
 using ProductGallary.Models;
 using ProductGallary.Reposatories;
 using ProductGallary.TDO;
@@ -12,35 +14,56 @@ namespace ProductGallary.Controllers
 
         CartInterface cartrepo;
         IReposatory<Product> reposatory;
-
-        public CartController(CartInterface cartrepo, UserManager<ApplicationUser> userManger, IReposatory<Product> reposatory)
+        IFilter<Cart> filter;
+        public CartController(CartInterface cartrepo, UserManager<ApplicationUser> userManger, IReposatory<Product> reposatory, IFilter<Cart> filter)
         {
             this.cartrepo = cartrepo;
             this.userManger = userManger;
             this.reposatory = reposatory;
+            this.filter = filter;
         }
 
-        public IActionResult shoppingcart()
+        public IActionResult Index()
         {
-            var cart = cartrepo.GetAll(); 
+            UserDto infoDTO = new UserDto();
+            var userID = userManger.GetUserId(HttpContext.User);
+            infoDTO.user_id = userID;
+            return RedirectToAction("shoppingcart",infoDTO);
+        }
+        [Authorize(Roles = $"{Roles.CUSTOMER_ROLE}")]
+        public IActionResult shoppingcart(string user_id)
+        {
+
+            var cart = filter.filter(user_id); 
             return View(cart);
         }
         [HttpPost]
+       [Authorize(Roles = $"{Roles.CUSTOMER_ROLE}")]
         public IActionResult addtocart(Guid id)
         {
-            var p = reposatory.GetById(id);
-            if (ModelState.IsValid)
-            {
-            Cart cart = new Cart();
             var userID = userManger.GetUserId(HttpContext.User);
-            cart.User_Id = userID;
-            cart.products.Add(p);
-            //Console.WriteLine(cart.products);
-            cartrepo.Add(cart);
-            return RedirectToAction("shoppingcart");
+            if (userID!=null)
+            {
+                Cart cart = new Cart();
+                var p = reposatory.GetById(id);
+                if (ModelState.IsValid)
+                {
+
+                    
+                    cart.User_Id = userID;
+                    cart.products.Add(p);
+                    Console.WriteLine(cart.products);
+                    cartrepo.Add(cart);
+                    return RedirectToAction("index");
+                }
+                return Redirect("Details");
             }
-            return Redirect("Details");
+            else
+            {
+                return RedirectToAction("Login");
+            }
         }
+        [Authorize(Roles = $"{Roles.CUSTOMER_ROLE}")]
         public IActionResult delete(Guid id)
         {
             cartrepo.Delete(id);

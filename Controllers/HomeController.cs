@@ -10,10 +10,11 @@ namespace ProductGallary.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        
-        public HomeController(ILogger<HomeController> logger)
+        private readonly UserManager<ApplicationUser> userManger;
+        public HomeController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManger)
         {
             _logger = logger;
+            this.userManger = userManger;
         }
 
         public IActionResult Index()

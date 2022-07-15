@@ -36,6 +36,6 @@ namespace ProductGallary.Models
         public Gallary? Gallary { get; set; }
         public Category? Category { get; set; }
 
-        public List<Cart> carts { get; set; } = new List<Cart>();
+        public List<Cart>? carts { get; set; } 
     }
 }

@@ -43,8 +43,9 @@
                     
                         
                         <li class="nav-item">
-                            <a class="nav-link text-info" asp-area="" asp-controller="Cart" asp-action="shoppingcart">سلة المشتريات </a>
+                            <a class="nav-link text-info" asp-area="" asp-controller="Cart" asp-action="Index" >سلة المشتريات </a>
                         </li>
+                        }
                         <li>
                                @if (User.Identity.IsAuthenticated && User.IsInRole(role: Roles.BUYER_ROLE))
                                {
