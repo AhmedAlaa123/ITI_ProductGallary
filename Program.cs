@@ -21,6 +21,7 @@ builder.Services.AddScoped<IReposatory<Product>, ProductReposatory>();
 builder.Services.AddScoped<IReposatory<Category>, CategoryRepository>();
 builder.Services.AddScoped<CartInterface,CartRepository>();
 builder.Services.AddScoped<IFilter<Cart>, CartRepository>();
+builder.Services.AddScoped<IProduct<Product>,ProductReposatory>();
 // connection String
 string connectionString = builder.Configuration.GetConnectionString("AhmedAlaa");
 //string connectionString = builder.Configuration.GetConnectionString("Sara");

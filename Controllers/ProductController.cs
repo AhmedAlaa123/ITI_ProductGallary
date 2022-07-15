@@ -17,18 +17,14 @@ namespace ProductGallary.Controllers
         IReposatory<Gallary> reposatory;
         IFilter<Gallary> filter;
         IProduct<Product> progal;
-        IReposatory<Gallary> reposatory;
-        IFilter<Gallary> filter;
         CartInterface cart;
         private readonly UserManager<ApplicationUser> userManger;
         IWebHostEnvironment webHostEnvironment;
         //DI dependance injection (constructor)
-        public ProductController(IReposatory<Product> _productRepo, IWebHostEnvironment webHostEnvironment , 
-            IReposatory<Category> _CategRepo , IReposatory<Gallary> reposatory,UserManager<ApplicationUser> userManger,
-            IFilter<Gallary> _filter, CartInterface _cart)
         public ProductController(IReposatory<Product> _productRepo, IWebHostEnvironment webHostEnvironment,
             IReposatory<Category> _CategRepo, IReposatory<Gallary> reposatory, UserManager<ApplicationUser> userManger,
-            IFilter<Gallary> _filter, IProduct<Product> _product)
+            IFilter<Gallary> _filter, CartInterface _cart, IProduct<Product> _product)
+       
         {
             ProductRepo = _productRepo;
             CategRepo = _CategRepo;

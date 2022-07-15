@@ -15,9 +15,9 @@ namespace ProductGallary.Controllers
         private readonly UserManager<ApplicationUser> userManger;
         private readonly RoleManager<IdentityRole> roleManager;
 
-        public OrderController(UserManager<ApplicationUser> _userManger, RoleManager<IdentityRole> _roleManager)
+        public OrderController(UserManager<ApplicationUser> _userManger, RoleManager<IdentityRole> _roleManager, IReposatory<Order> _orderReposatory)
         {
-            orderReposatory = new OrderReposatory();
+            orderReposatory = _orderReposatory;
             userManger = _userManger;
             roleManager = _roleManager;
         }
