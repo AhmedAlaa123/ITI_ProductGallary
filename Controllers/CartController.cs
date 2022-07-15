@@ -41,5 +41,10 @@ namespace ProductGallary.Controllers
             }
             return Redirect("Details");
         }
+        public IActionResult delete(Guid id)
+        {
+            cartrepo.Delete(id);
+            return RedirectToAction("shoppingcart");
+        }
     }
 }
