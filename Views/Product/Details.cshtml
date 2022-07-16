@@ -1,0 +1,40 @@
+﻿@model Product
+
+@{
+    ViewData["Title"] = "Details";
+    
+}
+
+<h3>تفاصيل المنتج </h3>
+
+<div class="card">
+<img class="card-img-top" src="/Images/ProductImages/@Model.Image" alt="Card image" style="max-width:50%" >
+<div class="card-body">
+    <h5 class="card-title">@Model.Name</h5>
+    <p class="card-text"> وصف المنتج :  @Model.Description</p>
+    <p class="card-text"> السعر :  @Model.Price  جنيه </p>
+
+            @if (Model.HasDiscount == true)
+            {
+                <p class="card-text"> الخصم :  @Model.DiscountPercentage % </p>           
+                <p class="card-text"> السعر بعد الخصم : @((Model.Price )-(( Model.DiscountPercentage /100)*(Model.Price))) جنيه </p>
+            }
+  
+    
+         <button asp-action="Index">العودة إلي كل المنتجات </button>        
+                @if (User.IsInRole("BUYER"))
+                {
+                    <button asp-action="Update"asp-route-id="@Model.Id">تعديل المنتج  </button>
+                }
+          
+    
+        <form asp-controller="Cart" asp-action="addtocart" asp-route-id="@Model.Id" method="post">
+            <button class=" btn-success"  type="submit">اضافة للسلة</button>
+        </form>
+  </div>
+</div>
+
+<br />
+<br />
+<br />
+<br />

@@ -1,0 +1,43 @@
+﻿@model List<Cart>
+@{
+    ViewData["Title"] = "shoppingcart";
+    List<Guid> products = (List<Guid>)ViewData[$"{Constant.PRODUCTS}"];
+}
+
+<h1>سلة المشتريات</h1>
+
+<table class="table table-responsive align-content-center  table-bordered border-info table-striped">
+      <thead>
+        <tr>
+          <th scope="col">اسم المنتج</th>
+          <th scope="col">السعر</th>
+           <th scope="col">قيمة الخصم</th>
+           <th scope="col">صورة المنتج</th>
+          <th scope="col">الطلب</th>
+           <th scope="col">الحذف</th>
+        </tr>
+       </thead>
+     <tbody>
+    @foreach (var item in @Model)
+    {
+       foreach (var p in @item.products)
+        {
+          <tr>
+          <td>@p.Name</td>
+          <td>@p.Price</td>
+           <td>@p.DiscountPercentage</td>
+           <td><img src="/img/ProductImages/@p.Image" width="100" height="100"></td>
+          <td><a class="btn btn-success" >طلب المنتج</a></td>
+          <td><a class="btn btn-danger" asp-controller="Cart" asp-action="delete" asp-route-id="@item.Id">حذف</a></td>
+        </tr>
+        }
+    }
+  </tbody>
+  
+</table>
+
+@foreach (var item in products)
+{
+    <h2>@item</h2>
+}
+
