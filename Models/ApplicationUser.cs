@@ -17,13 +17,13 @@ namespace ProductGallary.Models
 
         [Required,MinLength(5),MaxLength(30)]
         public string Address { get; set; }
-
-        public Cart Cart { get; set; }
+        public virtual List<Cart> Carts { get; set; }
 
         public virtual List<Product>Products { get; set; }
         public virtual List<Gallary> Gallaries { get; set; }
 
         public virtual List<Category> Categories { get; set; }
+        public virtual List<Order> Orders  { get; set; }
 
 
     }
