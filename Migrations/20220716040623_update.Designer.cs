@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductGallary.Models;
 
@@ -11,9 +12,10 @@ using ProductGallary.Models;
 namespace ProductGallary.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220716040623_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,7 +341,7 @@ namespace ProductGallary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Cart_Id")
+                    b.Property<Guid?>("Cart_Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DeliveryDate")
@@ -357,7 +359,8 @@ namespace ProductGallary.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Cart_Id")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Cart_Id] IS NOT NULL");
 
                     b.HasIndex("User_Id");
 
@@ -377,13 +380,13 @@ namespace ProductGallary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("DiscountPercentage")
+                    b.Property<float?>("DiscountPercentage")
                         .HasColumnType("real");
 
                     b.Property<Guid?>("Gallary_Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("HasDiscount")
+                    b.Property<bool?>("HasDiscount")
                         .HasColumnType("bit");
 
                     b.Property<string>("Image")
@@ -394,7 +397,8 @@ namespace ProductGallary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Price")
+                    b.Property<float?>("Price")
+                        .IsRequired()
                         .HasColumnType("real");
 
                     b.Property<string>("User_Id")
@@ -521,9 +525,7 @@ namespace ProductGallary.Migrations
                 {
                     b.HasOne("ProductGallary.Models.Cart", "Cart")
                         .WithOne("Order")
-                        .HasForeignKey("ProductGallary.Models.Order", "Cart_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductGallary.Models.Order", "Cart_Id");
 
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithMany("Orders")

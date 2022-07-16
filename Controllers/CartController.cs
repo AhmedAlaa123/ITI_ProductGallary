@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ProductGallary.Constants;
 using ProductGallary.Models;
 using ProductGallary.Reposatories;
@@ -22,24 +23,43 @@ namespace ProductGallary.Controllers
             this.reposatory = reposatory;
             this.filter = filter;
         }
-
         public IActionResult Index()
         {
+           
             UserDto infoDTO = new UserDto();
             var userID = userManger.GetUserId(HttpContext.User);
             infoDTO.user_id = userID;
             return RedirectToAction("shoppingcart",infoDTO);
         }
         [Authorize(Roles = $"{Roles.CUSTOMER_ROLE}")]
+
+
         public IActionResult shoppingcart(string user_id)
         {
-
-            var cart = filter.filter(user_id); 
-            return View(cart);
+            List<Guid> productsIds = getProductsIds();
+            //var cart = filter.filter(user_id);
+            List<ProductInfoDTO> cartProducts = new List<ProductInfoDTO>();
+            foreach(Guid id in productsIds)
+            {
+                Product product = this.reposatory.GetById(id);
+                if(product!=null)
+                {
+                    cartProducts.Add(
+                    new ProductInfoDTO
+                    {
+                        Id = product.Id,
+                        Name=product.Name,
+                        Image=product.Image,
+                        Price=product.Price
+                    }
+                    );
+                }
+            }
+            return View(cartProducts);
         }
-        [HttpPost]
+       [HttpPost]
        [Authorize(Roles = $"{Roles.CUSTOMER_ROLE}")]
-        public IActionResult addtocart(Guid id)
+        public IActionResult addtocart([FromRoute]Guid id)
         {
             var userID = userManger.GetUserId(HttpContext.User);
             if (userID!=null)
@@ -49,7 +69,7 @@ namespace ProductGallary.Controllers
                 if (ModelState.IsValid)
                 {
                     List<Guid> products;
-                    if (ViewData[$"{Constant.PRODUCTS}"]==null)
+                    if (!TempData.ContainsKey(Constant.PRODUCTS))
                     {
                         products = new List<Guid>()
                         {
@@ -59,17 +79,16 @@ namespace ProductGallary.Controllers
                     }
                     else
                     {
-                        products =(List<Guid>)ViewData[$"{Constant.PRODUCTS}"];
+
+                        products =JsonConvert.DeserializeObject<List<Guid>>(TempData[Constant.PRODUCTS].ToString());
                         products.Add(id);
-                        //ViewData[$"{Constant.PRODUCTS}"] = products;
+                        
 
 
                     }
-                    ViewData[$"{Constant.PRODUCTS}"] = products;
-                    //cart.User_Id = userID;
-                    //cart.products.Add(p);
-                    //Console.WriteLine(cart.products);
-                    //cartrepo.Add(cart);
+                    // save Products Ids In Session
+                    TempData[Constant.PRODUCTS] = JsonConvert.SerializeObject(products);
+                 
                     return RedirectToAction("index");
                 }
                 return Redirect("Details");
@@ -80,10 +99,33 @@ namespace ProductGallary.Controllers
             }
         }
         [Authorize(Roles = $"{Roles.CUSTOMER_ROLE}")]
-        public IActionResult delete(Guid id)
+        public IActionResult RemoveFromCart(Guid id)
         {
-            cartrepo.Delete(id);
+            List<Guid> productsIds = getProductsIds();
+            productsIds.Remove(id);
+            // update cart
+            TempData[Constant.PRODUCTS] = JsonConvert.SerializeObject(productsIds);
             return RedirectToAction("shoppingcart");
         }
+
+        [Authorize(Roles = $"{Roles.CUSTOMER_ROLE}")]
+        public IActionResult ClearCart()
+        {
+            TempData.Remove(Constant.PRODUCTS);
+            return RedirectToAction("shoppingcart");
+        }
+
+        // this method used to get all Products Ids From Session
+        private List<Guid> getProductsIds()
+        {
+            List<Guid> productsIds = new List<Guid>();
+            if (TempData.ContainsKey(Constant.PRODUCTS))
+            {
+                productsIds = JsonConvert.DeserializeObject<List<Guid>>(TempData[Constant.PRODUCTS].ToString());
+                TempData.Keep();
+            }
+            return productsIds;
+        }
+
     }
 }

@@ -28,15 +28,15 @@
  
    @foreach (var item in @Model)
    {     
-        <div class="card col-4">
-          <a class="btn btn-outline-dark" asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">    
+        <div class="card  col-md-4 col-sm-12 mb-3 ">
+          <a class="btn btn-dark" asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">    
                <div class="item">
                         @if (item.DiscountPercentage > 0)
                         {
                             <span class="notify-badge">@item.DiscountPercentage %</span>
                         }
 
-          <img class="card-img-top" height="300" width="360" src="/Images/ProductImages/@item.Image" alt="Card image">
+          <img class="card-img-top" height="300" width="360" src="/img/ProductImages/@item.Image" alt="Card image">
           </div>
           <div class="card-body">
           <h4 class="card-title">أسم المنتج :  @item.Name</h4>

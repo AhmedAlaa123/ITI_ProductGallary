@@ -27,7 +27,7 @@ namespace ProductGallary.Models
         public Bill Bill { get; set; }
 
         [ForeignKey("Cart")]
-        public Guid? Cart_Id { get; set; }
+        public Guid Cart_Id { get; set; }
         public Cart Cart{ get; set; }
 
 

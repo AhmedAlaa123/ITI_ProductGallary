@@ -2,7 +2,7 @@
 
 <!-- Navigation--> 
 
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style='background-color:#212529'>
         <div class="container">
             <a class="navbar-brand" href="#page-top"> حرف</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,10 +14,12 @@
                     <li class="nav-item"><a class="nav-link" href="/Category/Index">الفئات</a></li>
                     <li class="nav-item"><a class="nav-link" href="/Gallary/Index">المعارض</a></li>
                     <li class="nav-item"><a class="nav-link" href="/Product/Index">المنتجات</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Gallary/Index">المعارض</a></li>
-                    
-                    @*<li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>*@
+               
+                    @if (User.Identity.IsAuthenticated && User.IsInRole(role: Roles.CUSTOMER_ROLE))
+                    {
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index" >سلة المشتريات </a></li>
+                    }
+               
 
                      <li class="nav-item">
                                @if (User.Identity.IsAuthenticated && User.IsInRole(role: Roles.BUYER_ROLE))
@@ -26,6 +28,7 @@
 
                                }
                      </li>
+                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Developers" asp-action="Index" >المطورين</a></li>
 
                 </ul>
                @* <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0"></ul>
@@ -64,4 +67,3 @@
 
 
 
-@*                    <img src="/assets/img/navbar-logo.svg" alt="..." />*@

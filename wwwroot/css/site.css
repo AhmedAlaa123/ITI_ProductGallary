@@ -20,3 +20,15 @@ body {
   margin-bottom: 60px;
   direction:rtl
 }
+@media only print  {
+    .btn,header,.header,footer,.footer,a{
+        display:none;
+
+    }
+    
+}
+main{
+    margin-top:150px !important;
+    min-height:100vh
+}
+

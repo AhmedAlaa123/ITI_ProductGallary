@@ -6,10 +6,16 @@ namespace ProductGallary.Reposatories
     public class CartRepository:CartInterface,IFilter<Cart>
     {
         Context context;
+        private Guid Cartid;
+        public Guid ID { get { return Cartid; } set { Cartid = value; } }
         public CartRepository(Context context)
         {
             this.context = context;
+            ID = Guid.NewGuid();
+           
         }
+
+       
 
         public bool Add(Cart item)
         {
@@ -54,7 +60,7 @@ namespace ProductGallary.Reposatories
 
         public Cart GetById(Guid id)
         {
-            return context.Carts.FirstOrDefault(x => x.Id == id);
+            return context.Carts.Include(cr=>cr.products).FirstOrDefault(x => x.Id == id);
             
 
         }

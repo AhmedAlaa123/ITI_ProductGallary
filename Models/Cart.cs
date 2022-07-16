@@ -17,7 +17,7 @@ namespace ProductGallary.Models
 
         public Order? Order { get; set; }
 
-        public List<Product> products { get; set; } = new List<Product>();
+        public virtual List<Product> products { get; set; }
 
     }
 }
