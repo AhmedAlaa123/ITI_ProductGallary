@@ -31,6 +31,7 @@ namespace ProductGallary.Controllers
             infoDTO.user_id = userID;
             return RedirectToAction("shoppingcart",infoDTO);
         }
+
         [Authorize(Roles = $"{Roles.CUSTOMER_ROLE}")]
 
 
@@ -50,7 +51,8 @@ namespace ProductGallary.Controllers
                         Id = product.Id,
                         Name=product.Name,
                         Image=product.Image,
-                        Price=product.Price
+                        Price=product.DiscountPercentage != null?(product.Price) - ((product.DiscountPercentage / 100) * (product.Price)) :product.Price,
+                        DiscountPercentage=product.DiscountPercentage==null?0: product.DiscountPercentage
                     }
                     );
                 }

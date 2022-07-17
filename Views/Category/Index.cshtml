@@ -20,9 +20,9 @@
 </table>
 
   <td><a href="/Category/New">ADDNew</a></td>*@
-  @if (User.IsInRole("ADMIN"))
+  @if (User.IsInRole(Roles.ADMIN_ROLE))
   {
-      <a class="btn btn-success" asp-controller="Category" asp-action="New" >اضافة فئة جديدة </a>  
+      <a class="btn btn-secondary" asp-controller="Category" asp-action="New" >اضافة فئة جديدة <i class='fa fa-plus-circle'></i></a>  
   }
  
 <table class="table table-borderd table-hover">
@@ -37,12 +37,12 @@
            <td>
                <a class="btn btn-success" asp-controller="Product" asp-action="showproductatcategory" asp-route-id="@item.Id">@item.Name </a> &nbsp;
            </td>
-              @if (User.IsInRole("ADMIN")){
-                  <td><a class="btn btn-success" asp-controller="Category" asp-action="Update" asp-route-id="@item.Id">تعديل الفئة </a> </td>
+              @if (User.IsInRole(Roles.ADMIN_ROLE)){
+                  <td><a class="btn btn-info" asp-controller="Category" asp-action="Update" asp-route-id="@item.Id">تعديل الفئة <i class='fa fa-edit'></i></a> </td>
               }
        </tr>
     
-       <br /><br />
+     
  
   
     }

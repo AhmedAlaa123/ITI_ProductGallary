@@ -29,9 +29,9 @@
                <tr>
                    <td>@item.Name</td>
                    <td>@item.Price</td>
-                   <td>N/A</td>
+                   <td>@(item.DiscountPercentage==null?"لايوجد":$"{item.DiscountPercentage}%")</td>
                    <td><img src='/Img/ProductImages/@item.Image' class='rounded-circle' style="width:50px;height:50px"/></td>
-                   <td><a  asp-controller='cart' asp-action='RemoveFromCart' asp-route-id='@item.Id' class='btn btn-danger'>حزف</a></td>
+                   <td><a  asp-controller='cart' asp-action='RemoveFromCart' asp-route-id='@item.Id' class='btn btn-danger'>حذف <i class='fa fa-trash'></i></a></td>
                </tr>
             }
           </tbody>

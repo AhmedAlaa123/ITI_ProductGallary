@@ -50,18 +50,54 @@ namespace ProductGallary.Controllers
                         Id=pro.Id,
                         Name=pro.Name,
                         Image=pro.Image, 
-                        Price= pro.Price
+                        Price= ((bool)pro.HasDiscount)? (pro.Price) - ((pro.DiscountPercentage / 100) * (pro.Price)):pro.Price
                     };
                     billInfoDTO.Price += (float)(pro.Price==null?0:pro.Price);
                     billInfoDTO.products.Add(productInfo);
                 }
-                this.billsReposatory.Insert(new Bill { OrderId = billId });
+                // save Bill In database
+                this.billsReposatory.Insert(new Bill { OrderId = billId,Price=billInfoDTO.Price});
                 return View("DisplayBill", billInfoDTO);
 
             }
             return RedirectToAction("Index","Home");
         }
 
+        [Authorize(Roles = $"{Roles.ADMIN_ROLE}")]
+        [HttpGet]
+        public IActionResult DisplayAllBills()
+        {
+            List<BillInfoDTO> billsInfoDTO = new List<BillInfoDTO>();
+            List<Bill> Bills = this.billsReposatory.GetAll();
 
+            foreach (var item in Bills)
+            {
+
+                Order order = this.ordersReposatory.GetById((Guid)item.OrderId);
+                BillInfoDTO billInfoDTO = new BillInfoDTO
+                {
+                    userName = order==null?"غير معروف":order.User.Name,
+                    Id = item.Id,
+                    Price = item.Price,
+                    products = new List<ProductInfoDTO>()
+                };
+                Cart cart = this.cartReposatory.GetById(order.Cart_Id);
+                if (cart != null) { 
+                foreach (Product pro in order.Cart.products)
+                {
+                    billInfoDTO.products.Add(
+                        new ProductInfoDTO
+                        {
+                            Name=pro.Name,
+                            Price = pro.HasDiscount==null?pro.Price:(bool)pro.HasDiscount ? (pro.Price) - ((pro.DiscountPercentage / 100) * (pro.Price)) : pro.Price
+                        }
+                        );
+                }}
+                billsInfoDTO.Add(billInfoDTO);
+            }
+
+
+            return View(billsInfoDTO);
+        }
     }
 }
