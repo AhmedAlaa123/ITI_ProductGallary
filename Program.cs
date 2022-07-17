@@ -12,15 +12,16 @@ builder.Services.AddControllersWithViews();
 // register
 builder.Services.AddScoped<IReposatory<Order>,OrderReposatory>();
 builder.Services.AddScoped<IReposatory<Product>, ProductReposatory>();
-
+builder.Services.AddScoped<IReposatory<Bill>, BillReposatory>();
 builder.Services.AddScoped<IReposatory<Category>, CategoryRepository>();
-
+//builder.Services.AddScoped<CartInterface, CartRepository>();
 builder.Services.AddScoped<IReposatory<Gallary>,GallaryRepository>();
 builder.Services.AddScoped<IFilter<Gallary>, GallaryRepository>();
 builder.Services.AddScoped<IReposatory<Product>, ProductReposatory>();
 builder.Services.AddScoped<IReposatory<Category>, CategoryRepository>();
 builder.Services.AddScoped<CartInterface,CartRepository>();
 builder.Services.AddScoped<IFilter<Cart>, CartRepository>();
+
 builder.Services.AddScoped<IProduct<Product>,ProductReposatory>();
 // connection String
 string connectionString = builder.Configuration.GetConnectionString("AhmedAlaa");

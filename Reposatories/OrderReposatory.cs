@@ -8,9 +8,9 @@ namespace ProductGallary.Reposatories
     {
         private readonly Context context;
 
-        public OrderReposatory()
+        public OrderReposatory(Context _context)
         {
-            context =new Context();
+            context = _context;
         }
 
         // this used to delete Order
@@ -39,6 +39,7 @@ namespace ProductGallary.Reposatories
         public List<Order> GetAll()
         {
             List<Order> orders = this.context.Orders.
+                                Include(or => or.User).
                                 Include(or => or.Bill).
                                 Include(or => or.Cart).
                                 ToList();
@@ -50,8 +51,7 @@ namespace ProductGallary.Reposatories
         //this Used To Get Order By its Id
         public Order GetById(Guid id)
         {
-            Order order = context.Orders.
-                               
+            Order order = context.Orders.Include(or=>or.User).
                                 Include(or => or.Bill).
                                 Include(or => or.Cart).
                                 FirstOrDefault(o => o.Id == id);

@@ -20,3 +20,17 @@ body {
   margin-bottom: 60px;
   direction:rtl
 }
+@media only print  {
+    .btn, header, .header, footer, .footer, a, nav ,.nav{
+        display: none !important;
+    }
+    
+}
+main{
+    margin-top:150px !important;
+    min-height:100vh
+}
+
+.my-shadow{
+    box-shadow:3px 4px 5px 4px rgb(185, 181, 181)
+}

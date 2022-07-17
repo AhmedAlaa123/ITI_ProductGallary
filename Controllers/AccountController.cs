@@ -181,6 +181,13 @@ namespace ProductGallary.Controllers
             
             //sign out the user
             await this.signInManager.SignOutAsync();
+            // clear cart During LogOut
+            if(TempData.ContainsKey(Constant.PRODUCTS))
+                TempData.Remove(Constant.PRODUCTS);
+            // remove order id when log out
+            if (TempData.ContainsKey(Constant.ORDERID))
+                TempData.Remove(Constant.ORDERID);
+
             return RedirectToAction("Login", "Account");
         }
 

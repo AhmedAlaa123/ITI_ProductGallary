@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ProductGallary.Constants;
 using ProductGallary.Models;
 using ProductGallary.Reposatories;
@@ -14,17 +15,21 @@ namespace ProductGallary.Controllers
         private readonly IReposatory<Order> orderReposatory;
         private readonly UserManager<ApplicationUser> userManger;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly CartInterface cartReposatory;
+        private readonly IReposatory<Product> productReposatory;
 
-        public OrderController(UserManager<ApplicationUser> _userManger, RoleManager<IdentityRole> _roleManager, IReposatory<Order> _orderReposatory)
+        public OrderController(UserManager<ApplicationUser> _userManger, RoleManager<IdentityRole> _roleManager, IReposatory<Order> _orderReposatory, CartInterface _cartReposatory, IReposatory<Product> _productReposatory)
         {
             orderReposatory = _orderReposatory;
             userManger = _userManger;
             roleManager = _roleManager;
+            cartReposatory = _cartReposatory;
+            productReposatory = _productReposatory;
         }
 
         private List<OrderInfoDTO> getOrders(List<Order> orders)
         {
-                List<OrderInfoDTO> orderInfoDTOs = new List<OrderInfoDTO>();
+            List<OrderInfoDTO> orderInfoDTOs = new List<OrderInfoDTO>();
             foreach (Order order in orders)
             {
                 OrderInfoDTO orderInfoDTO = new OrderInfoDTO
@@ -49,6 +54,7 @@ namespace ProductGallary.Controllers
                 }
                 // add products to orders
                 orderInfoDTO.Products = productInfoDTOs;
+
 
                 orderInfoDTOs.Add(orderInfoDTO);
 
@@ -83,6 +89,62 @@ namespace ProductGallary.Controllers
 
 
             return View("PageNotFound");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = $"{Roles.CUSTOMER_ROLE}")]
+        public IActionResult SaveOrder()
+        {
+            var userID = userManger.GetUserId(HttpContext.User);
+            Cart cart = new Cart();
+            cart.User_Id=userID;
+            Guid cartId = Guid.NewGuid();
+            cart.Id = cartId;
+            List<Guid> productsIds = getProductsIds();
+            cart.products=new List<Product>();  
+            foreach (Guid productId in productsIds)
+            {
+                Product product = this.productReposatory.GetById(productId);
+                if (product != null)
+                    cart.products.Add(product);
+            }
+            if (cartReposatory.Add(cart))
+            {
+                Guid orderId = Guid.NewGuid();
+                Order order = new Order
+                {
+                    Cart_Id = cartId,
+                    User_Id = userID,
+                    Id = orderId,
+                    OrderDate = DateTime.Now,
+                    DeliveryDate=DateTime.Now.AddDays(5),
+                    IsCanceled=false
+                };
+                Bill bill = new Bill()
+                {
+                    OrderId=orderId
+                };
+                if (orderReposatory.Insert(order))
+                {
+                    if (TempData.ContainsKey(Constant.ORDERID))
+                        TempData[Constant.ORDERID] = orderId;
+                    else
+                        TempData.Add(Constant.ORDERID, orderId);
+
+                    TempData.Remove(Constant.PRODUCTS);
+                    return RedirectToAction( "DisplayBill", "Bill");
+                }
+                
+            }
+               
+                    return RedirectToAction("Index", "Errors");    
+        }
+        private List<Guid> getProductsIds()
+        {
+            List<Guid> productsIds = JsonConvert.DeserializeObject<List<Guid>>(TempData[Constant.PRODUCTS].ToString());
+            TempData.Keep();
+
+            return productsIds;
         }
     }
 }

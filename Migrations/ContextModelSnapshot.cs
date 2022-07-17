@@ -279,8 +279,7 @@ namespace ProductGallary.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("User_Id")
-                        .IsUnique();
+                    b.HasIndex("User_Id");
 
                     b.ToTable("Cart");
                 });
@@ -340,7 +339,7 @@ namespace ProductGallary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("Cart_Id")
+                    b.Property<Guid>("Cart_Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DeliveryDate")
@@ -358,8 +357,7 @@ namespace ProductGallary.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Cart_Id")
-                        .IsUnique()
-                        .HasFilter("[Cart_Id] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("User_Id");
 
@@ -379,13 +377,13 @@ namespace ProductGallary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("DiscountPercentage")
+                    b.Property<float>("DiscountPercentage")
                         .HasColumnType("real");
 
                     b.Property<Guid?>("Gallary_Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("HasDiscount")
+                    b.Property<bool>("HasDiscount")
                         .HasColumnType("bit");
 
                     b.Property<string>("Image")
@@ -396,8 +394,7 @@ namespace ProductGallary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("Price")
-                        .IsRequired()
+                    b.Property<float>("Price")
                         .HasColumnType("real");
 
                     b.Property<string>("User_Id")
@@ -494,8 +491,8 @@ namespace ProductGallary.Migrations
             modelBuilder.Entity("ProductGallary.Models.Cart", b =>
                 {
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
-                        .WithOne("Cart")
-                        .HasForeignKey("ProductGallary.Models.Cart", "User_Id")
+                        .WithMany("Carts")
+                        .HasForeignKey("User_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -524,7 +521,9 @@ namespace ProductGallary.Migrations
                 {
                     b.HasOne("ProductGallary.Models.Cart", "Cart")
                         .WithOne("Order")
-                        .HasForeignKey("ProductGallary.Models.Order", "Cart_Id");
+                        .HasForeignKey("ProductGallary.Models.Order", "Cart_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProductGallary.Models.ApplicationUser", "User")
                         .WithMany("Orders")
@@ -558,8 +557,7 @@ namespace ProductGallary.Migrations
 
             modelBuilder.Entity("ProductGallary.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Cart")
-                        .IsRequired();
+                    b.Navigation("Carts");
 
                     b.Navigation("Categories");
 
